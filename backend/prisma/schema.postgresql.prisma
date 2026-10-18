@@ -1,0 +1,157 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  HR_MANAGER
+  EMPLOYEE
+}
+
+enum LeaveType {
+  ANNUAL
+  SICK
+  UNPAID
+  MATERNITY
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum ReviewStatus {
+  DRAFT
+  SUBMITTED
+  COMPLETED
+}
+
+model User {
+  id           String           @id @default(uuid())
+  email        String           @unique
+  passwordHash String
+  role         Role             @default(EMPLOYEE)
+  isActive     Boolean          @default(true)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  profile      EmployeeProfile?
+
+  @@map("users")
+}
+
+model EmployeeProfile {
+  id             String              @id @default(uuid())
+  userId         String              @unique
+  user           User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  employeeCode   String              @unique
+  fullName       String
+  dateOfBirth    DateTime?
+  phone          String?
+  address        String?
+  department     String
+  position       String
+  baseSalary     Float
+  allowance      Float               @default(0)
+  joinDate       DateTime            @default(now())
+  avatarUrl      String?
+  attendances    Attendance[]
+  leaveRequests  LeaveRequest[]
+  payrolls       Payroll[]
+  selfReviews    PerformanceReview[] @relation("SelfReviews")
+  managerReviews PerformanceReview[] @relation("ManagerReviews")
+
+  @@map("employee_profiles")
+}
+
+model Attendance {
+  id         String          @id @default(uuid())
+  employeeId String
+  employee   EmployeeProfile @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  date       DateTime        @db.Date
+  checkIn    DateTime?
+  checkOut   DateTime?
+  workHours  Float           @default(0)
+  status     String          @default("PRESENT")
+  notes      String?
+  createdAt  DateTime        @default(now())
+
+  @@unique([employeeId, date])
+  @@map("attendances")
+}
+
+model LeaveRequest {
+  id            String          @id @default(uuid())
+  employeeId    String
+  employee      EmployeeProfile @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  leaveType     LeaveType
+  startDate     DateTime        @db.Date
+  endDate       DateTime        @db.Date
+  reason        String
+  status        LeaveStatus     @default(PENDING)
+  approvedBy    String?
+  reviewComment String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@map("leave_requests")
+}
+
+model Payroll {
+  id             String          @id @default(uuid())
+  employeeId     String
+  employee       EmployeeProfile @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  month          Int
+  year           Int
+  standardDays   Int             @default(22)
+  actualWorkDays Float
+  baseSalary     Float
+  allowance      Float           @default(0)
+  deductions     Float           @default(0)
+  tax            Float           @default(0)
+  netSalary      Float
+  isPaid         Boolean         @default(false)
+  paidAt         DateTime?
+  createdAt      DateTime        @default(now())
+
+  @@unique([employeeId, month, year])
+  @@map("payrolls")
+}
+
+model PerformanceCycle {
+  id        String              @id @default(uuid())
+  title     String
+  startDate DateTime
+  endDate   DateTime
+  isActive  Boolean             @default(true)
+  createdAt DateTime            @default(now())
+  reviews   PerformanceReview[]
+
+  @@map("performance_cycles")
+}
+
+model PerformanceReview {
+  id          String            @id @default(uuid())
+  cycleId     String
+  cycle       PerformanceCycle  @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+  employeeId  String
+  employee    EmployeeProfile   @relation("SelfReviews", fields: [employeeId], references: [id], onDelete: Cascade)
+  reviewerId  String?
+  reviewer    EmployeeProfile?  @relation("ManagerReviews", fields: [reviewerId], references: [id])
+  selfScore   Float?
+  selfComment String?
+  mgrScore    Float?
+  mgrComment  String?
+  finalRating String?
+  status      ReviewStatus      @default(DRAFT)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@unique([cycleId, employeeId])
+  @@map("performance_reviews")
+}

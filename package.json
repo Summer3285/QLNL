@@ -1,0 +1,31 @@
+{
+  "name": "nexnova-enterprise-hrm-root",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NexNova Technologies Enterprise HRM Monorepo (Web, API & Desktop)",
+  "workspaces": [
+    "frontend",
+    "backend",
+    "desktop"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:desktop": "npm --prefix desktop run dev",
+    "test:backend": "npm --prefix backend test",
+    "build:desktop": "npm --prefix desktop run dist:win"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "hrm",
+    "nexnova",
+    "enterprise",
+    "desktop",
+    "nextjs"
+  ],
+  "author": "NexNova Technologies JSC",
+  "license": "ISC"
+}

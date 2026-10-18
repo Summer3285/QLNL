@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL Database Service
+  postgres:
+    image: postgres:16-alpine
+    container_name: nexnova_hrm_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+      POSTGRES_DB: hrm_nexnova
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d hrm_nexnova"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nexnova_network
+
+  # 2. Backend RESTful API Service (Express + TypeScript + Prisma)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: nexnova_hrm_backend
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      DATABASE_URL: "postgresql://postgres:postgres123@postgres:5432/hrm_nexnova?schema=public"
+      JWT_SECRET: "nexnova_super_secure_jwt_secret_key_2026_enterprise_hrm_auth"
+      JWT_EXPIRES_IN: "7d"
+      FRONTEND_URL: "http://localhost:3000"
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - nexnova_network
+
+  # 3. Frontend Web App Service (Next.js 14 App Router + Tailwind CSS)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: nexnova_hrm_frontend
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      NEXT_PUBLIC_API_URL: "http://localhost:5000"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - nexnova_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  nexnova_network:
+    driver: bridge

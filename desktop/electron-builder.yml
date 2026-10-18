@@ -1,0 +1,28 @@
+appId: tech.nexnova.hrm.desktop
+productName: NexNova HRM Enterprise
+copyright: Copyright © 2026 NexNova Technologies JSC
+
+directories:
+  output: release
+  buildResources: resources
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+    - target: portable
+      arch:
+        - x64
+  artifactName: ${productName}-Setup-${version}.${ext}
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: always
+  createStartMenuShortcut: true
+  shortcutName: NexNova HRM
+
+files:
+  - "dist/**/*"
+  - "package.json"
