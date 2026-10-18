@@ -285,10 +285,29 @@
 - [x] **Giai đoạn 4:** Chuyển đổi phân hệ Tuyển dụng sang dạng Pipeline Kanban Board & Tính năng chuyển tiếp ứng viên thử việc thành nhân viên chính thức.
 - [x] **Giai đoạn 5:** Tiếp tục rà soát đồng bộ giao diện Flat B2B SaaS cho toàn bộ các màn hình còn lại.
 - [x] **Giai đoạn 6:** Hiện đại hóa toàn diện 4 giai đoạn HRM (Quick Onboarding tinh gọn, Tự động hóa quỹ phép & Chấm công, Chuẩn hóa tính lương & bù công, Sơ đồ tổ chức đa tầng & Trung tâm cảnh báo HR thông minh).
+### 17. 🚀 Khởi Tạo Git & Đẩy Toàn Bộ Dự Án Lên GitHub (18/10/2026)
+- **Hoạt động thực hiện:**
+  - Khởi tạo Git repository cục bộ (`git init`) và cấu hình nhánh mặc định `main`.
+  - Chuẩn hóa file [.gitignore](file:///d:/T%C3%A0i%20li%E1%BB%87u%20h%E1%BB%8Dc%20t%E1%BA%ADp/HTTT%20QLNL/.gitignore) loại trừ triệt để các tệp sinh tự động, thư mục phụ thuộc và file nhạy cảm (`node_modules/`, `.next/`, `dist/`, `*.db`, `~$*`, `*.tsbuildinfo`).
+  - Tạo commit đầu tiên `feat: initial commit for NexNova HRM enterprise platform`.
+  - Kết nối remote origin và đẩy thành công toàn bộ mã nguồn lên repository: `https://github.com/Summer3285/QLNL.git`.
+
+---
+
+
+## 🎯 Danh sách Việc Cần Làm Tiếp Theo (To-Do List)
+
+- [x] **Giai đoạn 1:** Triển khai Phân hệ Hợp đồng lao động & Chuẩn hóa Hồ sơ 360°.
+- [x] **Giai đoạn 2:** Xây dựng Cổng thông tin nhân viên tự phục vụ (Employee Self-Service - ESS / "Hồ sơ của tôi") & Cơ chế trừ tự động Quỹ ngày phép năm.
+- [x] **Giai đoạn 3:** Nâng cấp công thức Bảng lương chuẩn Luật Lao động Việt Nam (Khấu trừ BHXH 8%, BHYT 1.5%, BHTN 1%, Thuế TNCN lũy tiến 7 bậc) & Thiết kế Modal Phiếu lương điện tử (Payslip).
+- [x] **Giai đoạn 4:** Chuyển đổi phân hệ Tuyển dụng sang dạng Pipeline Kanban Board & Tính năng chuyển tiếp ứng viên thử việc thành nhân viên chính thức.
+- [x] **Giai đoạn 5:** Tiếp tục rà soát đồng bộ giao diện Flat B2B SaaS cho toàn bộ các màn hình còn lại.
+- [x] **Giai đoạn 6:** Hiện đại hóa toàn diện 4 giai đoạn HRM (Quick Onboarding tinh gọn, Tự động hóa quỹ phép & Chấm công, Chuẩn hóa tính lương & bù công, Sơ đồ tổ chức đa tầng & Trung tâm cảnh báo HR thông minh).
 - [x] **Giai đoạn 7:** Rà soát và cập nhật toàn diện tài liệu Báo cáo Mô tả Hệ thống Thông tin Quản trị Nguồn Nhân lực NexNova (`docs/MoTa_HeThong_QLNL_NexNova.docx`) chuẩn thể thức Nghị định 30/2020/NĐ-CP.
 - [x] **Giai đoạn 8:** Tái cấu trúc giao diện: Lột xác Thanh bên trái (Sidebar) sang chuẩn 1Office Compact Icon Rail 72px (nền `#f0f3f8`, icon tròn active, hamburger menu).
 - [x] **Giai đoạn 9:** Nâng cấp Navbar (Header) thành Command Workspace chuẩn 1Office (Badge phân hệ động `(+)`, Ô tìm kiếm nhanh toàn hệ thống có dropdown kết quả, Nút điểm danh nhanh, Popover thông báo điều hành và Dropdown tài khoản chuẩn B2B SaaS).
 - [x] **Giai đoạn 10:** Tinh giản Content Area & Tiêu đề các phân hệ (Xóa bỏ icon đóng hộp trước tiêu đề, tối ưu bảng dữ liệu nghiệp vụ, chuyển đổi quỹ lương phòng ban sang dạng Pill lọc chuẩn 1Office).
+- [x] **Giai đoạn 11:** Khởi tạo Git repository và tải (push) toàn bộ mã nguồn dự án lên GitHub: https://github.com/Summer3285/QLNL.git.
 
 ---
 
