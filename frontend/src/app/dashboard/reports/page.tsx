@@ -31,6 +31,7 @@ interface SalaryDueEmployee {
   baseSalary: number;
   lastSalaryRaise: string;
   monthsSinceLastRaise: number;
+  isDue?: boolean;
   eligible: boolean;
 }
 
@@ -120,6 +121,10 @@ export default function ReportsPage() {
     fetchReportsData();
   }, []);
 
+  const eligibleSalaryList = React.useMemo(() => {
+    return salaryDue.filter((item) => item.isDue || item.eligible);
+  }, [salaryDue]);
+
   const handlePrintCV = () => {
     window.print();
   };
@@ -166,7 +171,7 @@ export default function ReportsPage() {
           }`}
         >
           <TrendingUp className="w-4 h-4" />
-          <span>Nâng lương ({salaryDue.length})</span>
+          <span>Nâng lương ({eligibleSalaryList.length})</span>
         </button>
 
         <button
@@ -224,7 +229,7 @@ export default function ReportsPage() {
               </div>
             </div>
             <span className="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-sm">
-              {salaryDue.length} nhân sự đủ điều kiện
+              {eligibleSalaryList.length} nhân sự đủ điều kiện
             </span>
           </div>
 
@@ -242,7 +247,7 @@ export default function ReportsPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {salaryDue.length === 0 ? (
+                  {eligibleSalaryList.length === 0 ? (
                     <tr>
                       <td colSpan={6} className="px-6 py-12 text-center">
                         <div className="flex flex-col items-center justify-center max-w-sm mx-auto">
@@ -255,7 +260,7 @@ export default function ReportsPage() {
                       </td>
                     </tr>
                   ) : (
-                    salaryDue.map((e) => (
+                    eligibleSalaryList.map((e) => (
                       <tr key={e.id} className="hover:bg-slate-50/50 transition-colors">
                         <td className="px-6 py-4">
                           <div className="font-semibold text-slate-900">{e.fullName}</div>

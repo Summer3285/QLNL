@@ -144,7 +144,8 @@ export class AttendanceController {
         id,
         status,
         approvedBy,
-        reviewComment
+        reviewComment,
+        req.user?.employeeId
       );
 
       res.json({

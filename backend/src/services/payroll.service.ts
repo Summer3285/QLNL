@@ -4,6 +4,7 @@ export interface PayrollCalculationInput {
   baseSalary: number;
   allowance: number;
   rewardAmount?: number;
+  penaltyAmount?: number;
   standardDays?: number;
   actualWorkDays: number;
   paidLeaveDays?: number;
@@ -27,6 +28,7 @@ export interface PayrollCalculationResult {
   baseSalaryEarned: number;
   allowance: number;
   rewardAmount: number;
+  penaltyAmount: number;
   grossSalary: number;
 
   // Statutory Insurance (Người lao động trích đóng 10.5%)
@@ -138,8 +140,9 @@ export class PayrollService {
       });
     }
 
-    // 6. Net Take-Home Salary
-    const netSalary = Math.max(0, grossSalary - insuranceDeduction - personalIncomeTax);
+    // 6. Net Take-Home Salary (khấu trừ bảo hiểm, thuế TNCN và kỷ luật phạt)
+    const penaltyAmount = input.penaltyAmount || 0;
+    const netSalary = Math.max(0, grossSalary - insuranceDeduction - personalIncomeTax - penaltyAmount);
 
     return {
       standardDays,
@@ -148,6 +151,7 @@ export class PayrollService {
       baseSalaryEarned,
       allowance,
       rewardAmount,
+      penaltyAmount,
       grossSalary,
       insuranceSalary: insBase,
       bhxh,
@@ -226,6 +230,11 @@ export class PayrollService {
             decisionDate: { gte: startDate, lte: endDate },
           },
         },
+        disciplines: {
+          where: {
+            effectiveDate: { gte: startDate, lte: endDate },
+          },
+        },
       },
     });
 
@@ -267,6 +276,9 @@ export class PayrollService {
       // 3. Sum reward amounts for decisions issued in this month
       const rewardAmount = emp.rewards?.reduce((sum, r) => sum + (r.amount || 0), 0) || 0;
 
+      // 4. Sum discipline penalty amounts for decisions effective in this month
+      const penaltyAmount = emp.disciplines?.reduce((sum, d) => sum + (d.penaltyAmount || 0), 0) || 0;
+
       const activeContract = emp.contracts?.[0];
       const insuranceSalary = activeContract?.salaryInsurance || emp.baseSalary;
 
@@ -274,6 +286,7 @@ export class PayrollService {
         baseSalary: emp.baseSalary,
         allowance: emp.allowance,
         rewardAmount,
+        penaltyAmount,
         standardDays: 22,
         actualWorkDays: actualDays,
         paidLeaveDays,
@@ -299,7 +312,7 @@ export class PayrollService {
           bhxh: calc.bhxh,
           bhyt: calc.bhyt,
           bhtn: calc.bhtn,
-          deductions: calc.insuranceDeduction,
+          deductions: calc.insuranceDeduction + penaltyAmount,
           taxableIncome: calc.taxableIncome,
           tax: calc.personalIncomeTax,
           netSalary: calc.netSalary,
@@ -317,7 +330,7 @@ export class PayrollService {
           bhxh: calc.bhxh,
           bhyt: calc.bhyt,
           bhtn: calc.bhtn,
-          deductions: calc.insuranceDeduction,
+          deductions: calc.insuranceDeduction + penaltyAmount,
           taxableIncome: calc.taxableIncome,
           tax: calc.personalIncomeTax,
           netSalary: calc.netSalary,

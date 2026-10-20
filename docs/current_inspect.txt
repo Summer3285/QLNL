@@ -1,0 +1,177 @@
+Doc: docs/MoTa_HeThong_QLNL_NexNova.docx
+Paragraphs: 115, Tables: 5
+
+=== PARAGRAPHS ===
+[0] (Normal): CÔNG TY CỔ PHẦN CÔNG NGHỆ NEXNOVA
+[1] (Normal): PHÒNG TỔ CHỨC NHÂN SỰ — PHÒNG KỸ THUẬT PHẦN MỀM
+[2] (Normal): BÁO CÁO MÔ TẢ HỆ THỐNG THÔNG TIN
+QUẢN TRỊ NGUỒN NHÂN LỰC DOANH NGHIỆP
+[3] (Normal): (Hệ thống NexNova HRM — Phiên bản chuẩn hóa quản trị doanh nghiệp)
+[4] (Normal): Đơn vị triển khai: Công ty Cổ phần Công nghệ NexNova.
+[5] (Normal): Người soạn thảo: Phòng Tổ chức Nhân sự và Phòng Kỹ thuật Phần mềm.
+[6] (Normal): Thời gian hoàn thành: Hà Nội, tháng 10 năm 2026.
+[8] (Normal): MỤC LỤC TỔNG QUAN
+[9] (Normal): PHẦN I. GIỚI THIỆU TỔNG QUAN VỀ CÔNG TY CỔ PHẦN CÔNG NGHỆ NEXNOVA
+[10] (Normal): 1.1. Thông tin chung về doanh nghiệp
+[11] (Normal): 1.2. Tầm nhìn, sứ mệnh và giá trị cốt lõi
+[12] (Normal): 1.3. Cơ cấu tổ chức bộ máy doanh nghiệp
+[13] (Normal): PHẦN II. MÔ HÌNH HOẠT ĐỘNG QUẢN TRỊ NGUỒN NHÂN LỰC
+[14] (Normal): 2.1. Mô hình quản trị nhân sự tổng thể
+[15] (Normal): 2.2. Các quy trình nghiệp vụ cốt lõi của hệ thống
+[16] (Normal): 2.3. Hệ thống phân quyền truy cập người dùng
+[17] (Normal): PHẦN III. CÁC PHÂN HỆ QUẢN TRỊ NGUỒN NHÂN LỰC CHI TIẾT
+[18] (Normal): 3.1. Phân hệ Hồ sơ cán bộ và tổ chức nhân sự
+[19] (Normal): 3.2. Phân hệ Quản lý hợp đồng lao động
+[20] (Normal): 3.3. Phân hệ Cổng thông tin nhân viên tự phục vụ
+[21] (Normal): 3.4. Phân hệ Chấm công và quản lý nghỉ phép
+[22] (Normal): 3.5. Phân hệ Tiền lương và phiếu lương điện tử
+[23] (Normal): 3.6. Phân hệ Đánh giá hiệu suất công tác
+[24] (Normal): 3.7. Phân hệ Khen thưởng và kỷ luật thi đua
+[25] (Normal): 3.8. Phân hệ Điều chuyển và bổ nhiệm cán bộ
+[26] (Normal): 3.9. Phân hệ Tuyển dụng và tiếp nhận nhân sự
+[27] (Normal): 3.10. Phân hệ Báo cáo thống kê và sơ yếu lý lịch
+[28] (Normal): PHẦN IV. KIẾN TRÚC KỸ THUẬT VÀ CƠ SỞ DỮ LIỆU HỆ THỐNG
+[29] (Normal): 4.1. Sơ đồ kiến trúc tổng thể ba tầng
+[30] (Normal): 4.2. Công nghệ và nền tảng phát triển
+[31] (Normal): 4.3. Mô hình cơ sở dữ liệu quan hệ
+[33] (Normal): PHẦN I. GIỚI THIỆU TỔNG QUAN VỀ CÔNG TY CỔ PHẦN CÔNG NGHỆ NEXNOVA
+[34] (Normal): 1.1. Thông tin chung về doanh nghiệp
+[35] (Normal): Công ty Cổ phần Công nghệ NexNova được thành lập vào năm 2020, là doanh nghiệp công nghệ hoạt động chuyên sâu trong lĩnh vực nghiên cứu và cung ứng các giải pháp chuyển đổi số toàn diện, ứng dụng trí tuệ nhân tạo và xử lý dữ liệu lớn cho các cơ quan, tổ chức và doanh nghiệp quy mô vừa và lớn tại Việt Nam. Trải qua quá trình hình thành và phát triển vững chắc, NexNova đã xây dựng được đội ngũ nhân sự chất lượng cao gồm hơn năm mươi kỹ sư phần mềm, chuyên gia nghiên cứu dữ liệu và chuyên viên quản trị chuyên nghiệp. Trụ sở chính của công ty đặt tại Tầng 18, Tòa nhà NexNova Tower, đường Phạm Văn Đồng, quận Cầu Giấy, thành phố Hà Nội cùng văn phòng đại diện phía Nam tại Khu đô thị Sala, thành phố Thủ Đức, thành phố Hồ Chí Minh.
+[36] (Normal): Bảng 1.1 dưới đây tổng hợp các thông tin pháp lý và hành chính cơ bản của doanh nghiệp:
+[38] (Normal): 1.2. Tầm nhìn, sứ mệnh và giá trị cốt lõi
+[39] (Normal): Về tầm nhìn chiến lược, Công ty Cổ phần Công nghệ NexNova định hướng trở thành một trong những doanh nghiệp công nghệ hàng đầu tại khu vực Đông Nam Á trong việc làm chủ công nghệ trí tuệ nhân tạo và cung cấp các nền tảng quản trị thông minh cho khối doanh nghiệp trước năm 2030.
+[40] (Normal): Về sứ mệnh, công ty cam kết nghiên cứu, phát triển và cung ứng các sản phẩm phần mềm hiện đại, có tính ứng dụng thực tiễn cao, giúp các tổ chức và doanh nghiệp Việt Nam tối ưu hóa chi phí vận hành, nâng cao hiệu suất làm việc của người lao động, chuẩn hóa các quy trình quản trị nội bộ và kiến tạo lợi thế cạnh tranh bền vững.
+[41] (Normal): Về giá trị cốt lõi, toàn bộ phương châm hành động và văn hóa ứng xử của NexNova được xây dựng dựa trên bốn giá trị nền tảng: Thứ nhất, đổi mới sáng tạo không ngừng, luôn chủ động nghiên cứu công nghệ mới và tìm kiếm giải pháp tối ưu cho mọi vấn đề phát sinh; Thứ hai, coi con người là trọng tâm của sự phát triển, xây dựng môi trường làm việc dân chủ, văn minh, công bằng và tôn trọng năng lực cá nhân; Thứ ba, chính trực và minh bạch, bảo đảm mọi hoạt động quản lý, điều hành, phân phối thu nhập và đãi ngộ đều tuân thủ chặt chẽ pháp luật; Thứ tư, hiệu quả và chuyên nghiệp, cam kết tiến độ và chất lượng trong từng sản phẩm, dịch vụ cung cấp tới khách hàng và nội bộ doanh nghiệp.
+[42] (Normal): 1.3. Cơ cấu tổ chức bộ máy doanh nghiệp
+[43] (Normal): Cơ cấu tổ chức bộ máy của Công ty Cổ phần Công nghệ NexNova được thiết lập theo mô hình quản trị doanh nghiệp hiện đại, phân định rõ ràng giữa cấp hoạch định chiến lược và cấp triển khai nghiệp vụ chuyên môn. Bộ máy điều hành gồm Ban Tổng Giám đốc điều hành trực tiếp lãnh đạo toàn diện mọi mặt hoạt động của công ty và 05 phòng ban nghiệp vụ chức năng độc lập nhưng phối hợp liên thông chặt chẽ với nhau.
+[46] (Normal): Hình 1.1: Sơ đồ Cơ cấu Tổ chức Bộ máy NexNova Technologies
+[47] (Normal): PHẦN II. MÔ HÌNH HOẠT ĐỘNG QUẢN TRỊ NGUỒN NHÂN LỰC
+[48] (Normal): 2.1. Mô hình quản trị nhân sự tổng thể
+[49] (Normal): Hệ thống thông tin Quản trị Nguồn Nhân lực NexNova HRM được thiết kế theo mô hình quản trị nhân sự tích hợp, đóng vai trò là nền tảng số hóa quản lý xuyên suốt toàn bộ vòng đời của cán bộ nhân viên trong tổ chức. Mô hình bao gồm 09 phân hệ nghiệp vụ vận hành đồng bộ trên một nền tảng cơ sở dữ liệu tập trung duy nhất, loại bỏ hoàn toàn tình trạng cát cứ thông tin giữa các bộ phận.
+[50] (Normal): Danh mục chín phân hệ nghiệp vụ cấu thành hệ thống bao gồm: Phân hệ thứ nhất là Hồ sơ cán bộ và tổ chức nhân sự; Phân hệ thứ hai là Quản lý hợp đồng lao động; Phân hệ thứ ba là Cổng thông tin nhân viên tự phục vụ; Phân hệ thứ tư là Chấm công và quản lý nghỉ phép; Phân hệ thứ năm là Tiền lương và phiếu lương điện tử; Phân hệ thứ sáu là Đánh giá hiệu suất công tác; Phân hệ thứ bảy là Khen thưởng và kỷ luật thi đua; Phân hệ thứ tám là Điều chuyển và bổ nhiệm cán bộ; Phân hệ thứ chín là Tuyển dụng và tiếp nhận nhân sự.
+[51] (Normal): Điểm nổi bật của mô hình là tính liên thông dữ liệu hoàn toàn tự động giữa các khâu nghiệp vụ. Cụ thể, khi một ứng viên trúng tuyển qua phân hệ tuyển dụng, quy trình tiếp nhận nhân sự tự động kích hoạt tạo lập hồ sơ cá nhân, cấp tài khoản người dùng và thiết lập hợp đồng lao động thử việc với mức đóng bảo hiểm được hệ thống tự tính toán đúng quy định. Dữ liệu chấm công thực tế cùng các đơn nghỉ phép có hưởng lương hợp lệ được tự động đối soát và bù ngày công vào bảng lương hằng tháng. Đồng thời, các quyết định khen thưởng có hiệu lực trong kỳ sẽ tự động được tổng hợp thành khoản tiền thưởng trong bảng lương mà không đòi hỏi chuyên viên nhân sự phải thực hiện các thao tác nhập liệu thủ công lặp lại.
+[52] (Normal): 2.2. Các quy trình nghiệp vụ cốt lõi của hệ thống
+[53] (Normal): Hệ thống NexNova HRM chuẩn hóa và tự động hóa 05 chu trình nghiệp vụ quản trị nhân lực cơ bản sau đây:
+[54] (Normal): Quy trình thứ nhất là Tuyển dụng và tiếp nhận nhân sự mới: Căn cứ vào kế hoạch tuyển dụng đã được phê duyệt, bộ phận nhân sự tiếp nhận hồ sơ ứng viên và theo dõi tiến trình tuyển dụng qua các giai đoạn từ tiếp nhận hồ sơ, phỏng vấn chuyên môn, gửi thư đề nghị tuyển dụng đến tiếp nhận chính thức. Khi ứng viên chấp thuận đề nghị làm việc, tính năng tiếp nhận tự động trong một thao tác sẽ khởi tạo đồng thời tài khoản người dùng, hồ sơ nhân sự và hợp đồng thử việc theo đúng tỷ lệ hưởng lương theo quy định của Bộ luật Lao động.
+[55] (Normal): Quy trình thứ hai là Quản lý chấm công và giải quyết chế độ nghỉ phép: Người lao động thực hiện điểm danh hằng ngày qua ứng dụng web hoặc ứng dụng máy tính. Hệ thống tự động ghi nhận thời gian đến, thời gian về và tính toán tổng số giờ công làm việc trong ngày. Khi có nhu cầu nghỉ việc riêng hoặc nghỉ phép năm, nhân viên gửi đơn điện tử qua hệ thống; thuật toán đếm ngày làm việc tự động loại trừ các ngày thứ Bảy và Chủ nhật, kiểm tra số dư ngày phép khả dụng và chuyển đến cấp quản lý xem xét phê duyệt. Sau khi đơn được duyệt, hệ thống tự động trừ quỹ phép năm và cập nhật dữ liệu để phục vụ việc bảo toàn ngày công khi tính lương.
+[56] (Normal): Quy trình thứ ba là Tính lương, trích nộp bảo hiểm và thuế thu nhập cá nhân: Định kỳ hằng tháng, hệ thống tự động tổng hợp số ngày làm việc thực tế, cộng bù các ngày nghỉ phép hưởng lương theo quy định, trích nộp ba quỹ bảo hiểm bắt buộc gồm bảo hiểm xã hội, bảo hiểm y tế và bảo hiểm thất nghiệp theo mức trần quy định, áp dụng mức giảm trừ gia cảnh bản thân và người phụ thuộc, sau đó chiết tính thuế thu nhập cá nhân theo biểu thuế lũy tiến từng phần bảy bậc. Bảng lương sau khi duyệt sẽ được gửi tới từng cán bộ nhân viên dưới dạng phiếu lương điện tử trực quan.
+[57] (Normal): Quy trình thứ tư là Đánh giá hiệu suất công tác định kỳ: Phòng nhân sự khởi tạo kỳ đánh giá theo quý hoặc năm với bảng tiêu chí được phân bổ theo tỷ trọng phần trăm. Nhân viên tiến hành tự đánh giá kết quả thực hiện công việc và ghi nhận thành tích cá nhân; người quản lý trực tiếp thực hiện chấm điểm độc lập. Hệ thống tự động tính điểm bình quân gia quyền và phân loại kết quả hoàn thành nhiệm vụ của nhân sự theo các mức xuất sắc, tốt, đạt yêu cầu hoặc cần cải thiện.
+[58] (Normal): Quy trình thứ năm là Điều chuyển công tác, khen thưởng và xử lý kỷ luật: Mọi quyết định điều động công tác, bổ nhiệm chức danh hoặc thay đổi bậc lương khi được phê duyệt sẽ tự động đồng bộ hóa thông tin mới vào hồ sơ cán bộ. Các quyết định khen thưởng thi đua hoặc chế tài kỷ luật được lưu trữ vĩnh viễn trong quá trình công tác của nhân sự, đồng thời các khoản tiền thưởng hoặc giảm trừ được liên thông trực tiếp với kỳ tính lương tương ứng.
+[59] (Normal): 2.3. Hệ thống phân quyền truy cập người dùng
+[60] (Normal): Hệ thống NexNova HRM triển khai mô hình kiểm soát truy cập dựa trên vai trò nhằm bảo đảm tính bảo mật, phân định rõ ràng trách nhiệm công việc và bảo vệ dữ liệu nhân sự cá nhân theo quy định của pháp luật. Hệ thống phân định 03 nhóm vai trò người dùng chính được mô tả chi tiết tại Bảng 2.1:
+[62] (Normal): PHẦN III. CÁC PHÂN HỆ QUẢN TRỊ NGUỒN NHÂN LỰC CHI TIẾT
+[63] (Normal): 3.1. Phân hệ Hồ sơ cán bộ và tổ chức nhân sự
+[64] (Normal): Mục đích và phạm vi quản lý: Phân hệ chịu trách nhiệm lưu trữ và quản trị tập trung toàn bộ dữ liệu nhân thân, quá trình đào tạo, lịch sử làm việc và quan hệ tổ chức của cán bộ nhân viên trong toàn doanh nghiệp. Hồ sơ nhân sự được thiết kế theo mô hình ba trăm sáu mươi độ, bao gồm đầy đủ các nhóm thông tin: thông tin công việc và chức danh, phòng ban trực thuộc, người quản lý trực tiếp, thông tin định danh pháp lý như số căn cước công dân, ngày cấp, nơi cấp, mã số thuế cá nhân, số sổ bảo hiểm xã hội và thông tin tài khoản ngân hàng nhận lương.
+[65] (Normal): Quy trình tiếp nhận nhân sự tinh gọn: Nhằm tối ưu hóa năng suất làm việc của cán bộ nhân sự, biểu mẫu tạo mới nhân viên được tinh gọn chỉ tập trung vào năm nhóm thông tin cốt lõi gồm mã nhân viên, họ tên, thông tin liên lạc, chức danh và mức lương cơ bản. Các trường thông tin về căn cước công dân, mã số thuế và tài khoản ngân hàng được tách thành chuyên mục riêng biệt để chuyên viên nhân sự bổ sung sau khi tiếp nhận hồ sơ gốc hoặc người lao động tự cập nhật qua Cổng thông tin tự phục vụ. Hệ thống tích hợp thước đo tỷ lệ hoàn thiện hồ sơ với các chỉ báo trực quan, giúp phát hiện nhanh các trường hợp còn thiếu giấy tờ pháp lý.
+[66] (Normal): 3.2. Phân hệ Quản lý hợp đồng lao động
+[67] (Normal): Mục đích và ý nghĩa pháp lý: Đây là phân hệ nền tảng bảo đảm tính tuân thủ pháp luật lao động trong doanh nghiệp, quản lý chặt chẽ quan hệ lao động từ khi ký kết, thực hiện đến khi chấm dứt hoặc gia hạn hợp đồng.
+[68] (Normal): Phân loại và quản lý hợp đồng: Hệ thống quản lý toàn diện 05 loại hợp đồng lao động theo quy định của Bộ luật Lao động, bao gồm hợp đồng thử việc, hợp đồng xác định thời hạn một năm, hợp đồng xác định thời hạn ba năm, hợp đồng không xác định thời hạn và hợp đồng thời vụ. Mỗi bản ghi hợp đồng lưu trữ số hiệu hợp đồng duy nhất, ngày ký, ngày bắt đầu hiệu lực, ngày kết thúc, chức danh công việc, thời giờ làm việc và mức lương căn cứ đóng bảo hiểm xã hội.
+[69] (Normal): Cơ chế cảnh báo hợp đồng sắp hết hạn: Hệ thống tự động rà soát thời hạn hợp đồng hằng ngày và phát tín hiệu cảnh báo đối với các hợp đồng sắp hết hiệu lực trong vòng ba mươi ngày ngay trên bảng điều khiển trung tâm của người quản lý nhân sự. Cảnh báo được phân cấp màu sắc rõ ràng theo số ngày còn lại, giúp bộ phận nhân sự chủ động tiến hành đánh giá và thực hiện thủ tục tái ký kịp thời.
+[70] (Normal): 3.3. Phân hệ Cổng thông tin nhân viên tự phục vụ
+[71] (Normal): Mục đích và vai trò: Phân hệ Cổng thông tin cá nhân dành riêng cho người lao động được xây dựng nhằm nâng cao tính minh bạch, tăng cường trải nghiệm làm việc số hóa và giảm tải các thủ tục giấy tờ hành chính cho bộ phận nhân sự.
+[72] (Normal): Các chức năng tự phục vụ chính: Người lao động có thể đăng nhập vào cổng cá nhân để chủ động theo dõi toàn bộ hồ sơ công việc, thông tin người quản lý trực tiếp, tình trạng hợp đồng lao động đang có hiệu lực, số dư quỹ ngày phép năm khả dụng và lịch sử các kỳ chi trả tiền lương. Người lao động được quyền tự cập nhật số điện thoại liên lạc, địa chỉ cư trú và thông tin tài khoản ngân hàng. Đồng thời, cổng thông tin cho phép nhân viên xem trực tiếp phiếu lương điện tử của từng tháng và tải tệp phiếu lương định dạng PDF có chữ ký xác nhận.
+[73] (Normal): 3.4. Phân hệ Chấm công và quản lý nghỉ phép
+[74] (Normal): Nghiệp vụ chấm công điểm danh: Hệ thống hỗ trợ cán bộ nhân viên thực hiện điểm danh vào ca và kết thúc ca làm việc trực tuyến thông qua ứng dụng web hoặc ứng dụng máy tính cục bộ. Dữ liệu thời gian được ghi nhận tự động theo thời gian thực của máy chủ, tự động tính tổng số giờ làm việc thực tế trong ngày và phân loại chính xác các trạng thái đi làm đúng giờ, đi muộn hoặc vắng mặt.
+[75] (Normal): Nghiệp vụ quản lý nghỉ phép và quỹ phép năm: Mỗi cán bộ nhân viên được khởi tạo quỹ phép năm tiêu chuẩn mười hai ngày làm việc theo luật định. Khi nhân viên tạo đơn xin nghỉ phép, thuật toán đếm ngày làm việc tự động xác định số ngày nghỉ thực tế từ thứ Hai đến thứ Sáu, loại trừ hoàn toàn các ngày thứ Bảy và Chủ nhật, đồng thời tự động kiểm tra số dư phép năm còn lại. Hệ thống sẽ từ chối gửi đơn nếu số ngày xin nghỉ vượt quá số dư khả dụng. Khi người quản lý phê duyệt đơn, hệ thống tự động trừ quỹ phép; trường hợp đơn bị từ chối sau khi đã duyệt, số ngày phép sẽ được hoàn trả đầy đủ vào quỹ. Nhân viên cũng có thể chủ động thu hồi đơn khi đơn đang ở trạng thái chờ duyệt. Bên cạnh phép năm, hệ thống hỗ trợ quản lý chế độ nghỉ ốm đau, thai sản, nghỉ không hưởng lương và chế độ nghỉ việc riêng có hưởng lương như hiếu, hỷ theo luật định.
+[76] (Normal): 3.5. Phân hệ Tiền lương và phiếu lương điện tử
+[77] (Normal): Mục đích: Tự động hóa toàn diện quy trình tính lương hằng tháng, bảo đảm tính chính xác tuyệt đối, tuân thủ chặt chẽ các quy định của Luật Bảo hiểm xã hội, Luật Việc làm và Luật Thuế thu nhập cá nhân hiện hành.
+[78] (Normal): Nguyên tắc tính lương và bù công phép năm: Lương cơ bản hằng tháng được tính dựa trên tỷ lệ giữa số ngày làm việc thực tế và số ngày công chuẩn trong tháng. Nhằm bảo đảm đầy đủ quyền lợi của người lao động, các ngày nghỉ phép có hưởng lương hợp lệ gồm phép năm, nghỉ thai sản và nghỉ việc riêng có hưởng lương được hệ thống tự động tính bù vào số ngày công hưởng lương, bảo đảm nguyên tắc tổng số ngày công tính lương không vượt quá số ngày công chuẩn trong tháng.
+[79] (Normal): Trích nộp các quỹ bảo hiểm bắt buộc: Hệ thống tách bạch ba khoản bảo hiểm bắt buộc thuộc trách nhiệm đóng của người lao động gồm: bảo hiểm xã hội với tỷ lệ tám phần trăm, bảo hiểm y tế với tỷ lệ một phẩy năm phần trăm và bảo hiểm thất nghiệp với tỷ lệ một phần trăm. Mức lương làm căn cứ trích nộp bảo hiểm được lấy chính xác từ hợp đồng lao động đang có hiệu lực. Hệ thống tự động áp dụng mức trần đóng bảo hiểm xã hội và bảo hiểm y tế tối đa bằng hai mươi lần mức lương cơ sở, đồng thời mức trần đóng bảo hiểm thất nghiệp không vượt quá hai mươi lần mức lương tối thiểu vùng một theo quy định pháp luật.
+[80] (Normal): Tổng hợp tiền thưởng và giảm trừ gia cảnh: Hệ thống tự động truy vấn và tổng hợp các khoản tiền thưởng phát sinh từ các quyết định khen thưởng có hiệu lực trong tháng vào bảng lương. Khi xác định thu nhập tính thuế, hệ thống áp dụng mức giảm trừ gia cảnh đối với bản thân người nộp thuế là mười một triệu đồng mỗi tháng và mức giảm trừ cho mỗi người phụ thuộc là bốn phẩy bốn triệu đồng mỗi tháng.
+[81] (Normal): Biểu thuế thu nhập cá nhân lũy tiến từng phần bảy bậc: Phần thu nhập tính thuế sau khi giảm trừ các khoản đóng bảo hiểm bắt buộc và giảm trừ gia cảnh được áp dụng biểu thuế lũy tiến từng phần bảy bậc theo quy định tại Thông tư số 111/2013/TT-BTC. Hệ thống bóc tách rõ số tiền thuế phát sinh tại từng bậc thuế, giúp người lao động và bộ phận kế toán dễ dàng đối soát.
+[82] (Normal): Phiếu lương điện tử: Cung cấp giao diện xem phiếu lương trực quan gồm ba phần rõ ràng: Phần một là Thu nhập và phụ cấp; Phần hai là Các khoản trích nộp bảo hiểm và thuế thu nhập cá nhân; Phần ba là Số tiền thực lĩnh chuyển khoản. Hệ thống hỗ trợ in phiếu lương trực tiếp và xuất tệp văn bản PDF chuẩn hóa có chữ ký xác nhận hai bên.
+[83] (Normal): 3.6. Phân hệ Đánh giá hiệu suất công tác
+[84] (Normal): Mục đích: Thiết lập quy trình đánh giá kết quả thực hiện nhiệm vụ của cán bộ nhân viên một cách khách quan, khoa học và minh bạch.
+[85] (Normal): Quy trình đánh giá đa tiêu chí theo trọng số: Phòng nhân sự khởi tạo kỳ đánh giá theo quý hoặc theo năm gắn liền với mẫu tiêu chí chuyên môn. Mỗi tiêu chí được xác định tỷ trọng phần trăm cụ thể nhằm phản ánh đúng mức độ ưu tiên của công việc. Quy trình gồm hai bước độc lập: Bước thứ nhất là nhân viên tự chấm điểm và trình bày báo cáo thành tích nổi bật; Bước thứ hai là người quản lý trực tiếp thực hiện chấm điểm và ghi nhận ý kiến nhận xét chuyên môn. Hệ thống tự động tính điểm bình quân gia quyền của cả hai bước và tự động xếp loại kết quả gồm xuất sắc, tốt, đạt yêu cầu hoặc cần cải thiện.
+[86] (Normal): 3.7. Phân hệ Khen thưởng và kỷ luật thi đua
+[87] (Normal): Quản lý quyết định khen thưởng: Ban hành các quyết định biểu dương khen thưởng gồm số quyết định, danh hiệu thi đua, số tiền thưởng, ngày ban hành và lý do thành tích. Toàn bộ tiền thưởng được hệ thống tự động kết nối và chi trả trong kỳ tính lương tương ứng của nhân sự.
+[88] (Normal): Quản lý chế tài kỷ luật: Ghi nhận các hình thức xử lý kỷ luật lao động từ khiển trách, cảnh cáo, hạ bậc lương đến buộc thôi việc, mức phạt tài chính nếu có, thời hạn hiệu lực và lý do vi phạm nhằm bảo đảm tính kỷ cương và văn hóa tuân thủ trong doanh nghiệp.
+[89] (Normal): 3.8. Phân hệ Điều chuyển và bổ nhiệm cán bộ
+[90] (Normal): Quản lý lịch sử công tác: Ghi nhận chi tiết mọi quyết định điều chuyển phòng ban, bổ nhiệm chức danh hoặc thay đổi bậc lương của nhân sự. Khi quyết định điều chuyển được phê duyệt, dữ liệu phòng ban, chức vụ và mức lương mới được tự động cập nhật đồng bộ vào hồ sơ cán bộ. Toàn bộ lịch sử điều chuyển được lưu trữ vĩnh viễn phục vụ công tác tra cứu thâm niên và quá trình phát triển của cán bộ.
+[91] (Normal): 3.9. Phân hệ Tuyển dụng và tiếp nhận nhân sự
+[92] (Normal): Quản lý kế hoạch tuyển dụng: Mỗi chiến dịch tuyển dụng xác định rõ chức danh, phòng ban, số lượng chỉ tiêu, yêu cầu chuyên môn, ngân sách dự kiến và hạn nộp hồ sơ.
+[93] (Normal): Bảng theo dõi quy trình ứng viên năm giai đoạn: Toàn bộ ứng viên tham gia ứng tuyển được theo dõi trực quan qua năm giai đoạn nối tiếp nhau gồm tiếp nhận hồ sơ, phỏng vấn chuyên môn và văn hóa, gửi đề nghị tuyển dụng, đã tiếp nhận thử việc và từ chối hồ sơ không phù hợp.
+[94] (Normal): Tiếp nhận nhân sự tự động một chạm: Khi ứng viên được lựa chọn, người quản lý nhân sự kích hoạt tính năng tiếp nhận tự động. Trong một thao tác duy nhất, hệ thống tự động sinh mã nhân viên chuẩn, khởi tạo tài khoản đăng nhập với vai trò nhân viên, tạo hồ sơ cán bộ liên kết đúng phòng ban và tự động lập hợp đồng thử việc thời hạn hai tháng với mức lương đóng bảo hiểm bằng tám mươi lăm phần trăm mức lương cơ sở theo Điều 26 Bộ luật Lao động năm 2019.
+[95] (Normal): 3.10. Phân hệ Báo cáo thống kê và sơ yếu lý lịch
+[96] (Normal): Báo cáo tổng hợp nhân sự: Cung cấp các báo cáo phân tích đa chiều về cơ cấu nhân sự theo phòng ban, giới tính, độ tuổi bình quân, trình độ học vấn, thâm niên công tác và quỹ lương tháng của từng bộ phận.
+[97] (Normal): Cảnh báo rủi ro nhân sự: Tự động thống kê danh sách cán bộ đến niên hạn xem xét tăng lương, nhân sự sắp đến tuổi nghỉ hưu, hợp đồng lao động sắp hết hạn và hồ sơ nhân viên chưa hoàn thiện.
+[98] (Normal): Xuất Sơ yếu lý lịch cán bộ: Hỗ trợ kết xuất bản Sơ yếu lý lịch cán bộ theo mẫu chuẩn 2C của Bộ Nội vụ ra tệp PDF với đầy đủ thông tin nhân thân, quá trình đào tạo, lịch sử công tác, tình trạng sức khỏe và kết quả khen thưởng kỷ luật.
+[99] (Normal): PHẦN IV. KIẾN TRÚC KỸ THUẬT VÀ CƠ SỞ DỮ LIỆU HỆ THỐNG
+[100] (Normal): 4.1. Sơ đồ kiến trúc tổng thể ba tầng
+[101] (Normal): Hệ thống NexNova HRM được xây dựng theo kiến trúc ba tầng chuẩn mực trong kỹ thuật phần mềm doanh nghiệp, bảo đảm tính độc lập, khả năng mở rộng linh hoạt và mức độ an toàn dữ liệu cao:
+[102] (Normal): Tầng thứ nhất là Tầng giao diện người dùng: Cung cấp giao diện ứng dụng web tương tác thời gian thực và ứng dụng máy tính cục bộ cho cán bộ nhân viên và nhà quản lý. Toàn bộ giao diện được thiết kế phẳng, tối ưu hóa thao tác nhập liệu, loại bỏ các chi tiết đồ họa dư thừa và hỗ trợ hiển thị tốt trên mọi kích thước màn hình.
+[103] (Normal): Tầng thứ hai là Tầng xử lý nghiệp vụ: Đảm nhận toàn bộ logic tính toán, xác thực quyền hạn người dùng, kiểm soát quy tắc nghiệp vụ chấm công, quỹ phép, tiền lương, bảo hiểm và xử lý giao dịch cơ sở dữ liệu an toàn.
+[104] (Normal): Tầng thứ ba là Tầng truy xuất và lưu trữ dữ liệu: Đảm bảo tính toàn vẹn dữ liệu, lưu trữ cơ sở dữ liệu quan hệ và cung cấp các dịch vụ sao lưu định kỳ.
+[106] (Normal): Hình 4.1: Sơ đồ Kiến trúc Kỹ thuật Hệ thống 3 Tầng NexNova HRM
+[107] (Normal): 4.2. Công nghệ và nền tảng phát triển
+[108] (Normal): Các công nghệ và công cụ được sử dụng để phát triển hệ thống NexNova HRM được tổng hợp chi tiết tại Bảng 4.1:
+[110] (Normal): 4.3. Mô hình cơ sở dữ liệu quan hệ
+[111] (Normal): Cơ sở dữ liệu của hệ thống NexNova HRM được chuẩn hóa theo mô hình cơ sở dữ liệu quan hệ gồm 18 bảng dữ liệu chính, bảo đảm tính toàn vẹn tham chiếu thông qua các ràng buộc khóa chính và khóa ngoại chặt chẽ. Danh mục các bảng dữ liệu và chức năng lưu trữ được mô tả chi tiết tại Bảng 4.2:
+[113] (Normal): — HẾT —
+[114] (Normal): Tài liệu được lập và phê duyệt bởi:
+Phòng Tổ chức Nhân sự & Phòng Kỹ thuật Phần mềm
+Công ty Cổ phần Công nghệ NexNova — Tháng 10/2026
+
+=== TABLES ===
+
+--- TABLE 0 (12 rows, 2 cols) ---
+  Row 0: Tiêu chí | Thông tin chi tiết
+  Row 1: Tên doanh nghiệp | Công ty Cổ phần Công nghệ NexNova
+  Row 2: Tên giao dịch quốc tế | NexNova Technologies Joint Stock Company
+  Row 3: Mã số thuế doanh nghiệp | 0109876543
+  Row 4: Năm thành lập | 2020
+  Row 5: Trụ sở chính | Tầng 18, Tòa nhà NexNova Tower, Phạm Văn Đồng, Cầu Giấy, Hà Nội
+  Row 6: Văn phòng đại diện phía Nam | Khu Đô thị Sala, Phường An Khánh, TP. Thủ Đức, TP. Hồ Chí Minh
+  Row 7: Lĩnh vực hoạt động chính | Công nghệ thông tin, Trí tuệ nhân tạo, Giải pháp chuyển đổi số doanh nghiệp
+  Row 8: Quy mô lực lượng lao động | Trên 50 cán bộ, kỹ sư và chuyên viên chính thức
+  Row 9: Trang thông tin điện tử | https://nexnova.tech
+  Row 10: Hòm thư điện tử liên hệ | contact@nexnova.tech
+  Row 11: Người đại diện theo pháp luật | Ông Trần Quang Huy — Giám đốc Điều hành
+
+--- TABLE 1 (6 rows, 4 cols) ---
+  Row 0: Số TT | Phòng ban / Bộ phận | Chức năng và nhiệm vụ chính | Lãnh đạo phụ trách
+  Row 1: 1 | Phòng Kỹ thuật Phần mềm | Nghiên cứu, phát triển các hệ thống phần mềm cốt lõi, ứng dụng web, ứng dụng máy tính và quản trị hạ tầng mạng. | Ông Trần Quang Huy (Kiêm nhiệm Tổng Giám đốc)
+  Row 2: 2 | Phòng Trí tuệ Nhân tạo và Dữ liệu | Nghiên cứu ứng dụng các thuật toán trí tuệ nhân tạo, xử lý dữ liệu lớn, mô hình ngôn ngữ và thị giác máy tính. | TS. Đặng Minh Tuấn (Trưởng phòng)
+  Row 3: 3 | Phòng Sản phẩm và Thiết kế | Khảo sát yêu cầu người dùng, thiết kế trải nghiệm giao diện người dùng, quản trị tính năng và lộ trình phát triển sản phẩm. | Bà Phạm Mai Lan (Trưởng phòng)
+  Row 4: 4 | Phòng Tổ chức Nhân sự | Quản trị toàn diện nguồn nhân lực, tuyển dụng, đào tạo, chế độ tiền lương, bảo hiểm xã hội và xây dựng văn hóa doanh nghiệp. | ThS. Nguyễn Thu Hà (Trưởng phòng)
+  Row 5: 5 | Phòng Tài chính và Vận hành | Quản lý công tác tài chính kế toán, lập kế hoạch ngân sách, quản lý tài sản, pháp chế và hậu cần hành chính doanh nghiệp. | ThS. Hoàng Quốc Bảo (Trưởng phòng)
+
+--- TABLE 2 (4 rows, 4 cols) ---
+  Row 0: Vai trò người dùng | Mô tả đối tượng | Phạm vi quyền hạn chính | Phạm vi truy cập dữ liệu
+  Row 1: Quản trị viên (ADMIN) | Lãnh đạo công ty và cán bộ kỹ trị hệ thống | Toàn quyền cấu hình tham số hệ thống, quản lý tài khoản người dùng, phân quyền truy cập, sao lưu dữ liệu và xem toàn bộ báo cáo phân tích. | Toàn bộ cơ sở dữ liệu của doanh nghiệp
+  Row 2: Quản lý nhân sự (HR_MANAGER) | Chuyên viên và lãnh đạo Phòng Tổ chức Nhân sự | Quản lý hồ sơ nhân sự, tạo và theo dõi hợp đồng lao động, phê duyệt đơn nghỉ phép, tính toán tiền lương, tổ chức đánh giá hiệu suất và điều hành tuyển dụng. | Toàn bộ hồ sơ nhân sự và bảng lương nhân viên
+  Row 3: Cán bộ nhân viên (EMPLOYEE) | Toàn thể người lao động trong doanh nghiệp | Điểm danh hằng ngày, nộp đơn nghỉ phép, tra cứu hồ sơ cá nhân, xem và tải phiếu lương điện tử, tự cập nhật thông tin liên hệ và số tài khoản ngân hàng. | Chỉ có quyền truy cập dữ liệu của chính mình
+
+--- TABLE 3 (11 rows, 3 cols) ---
+  Row 0: Thành phần hệ thống | Công nghệ và nền tảng sử dụng | Ghi chú kỹ thuật
+  Row 1: Giao diện ứng dụng Web | Next.js 14, React 18, TypeScript, Tailwind CSS | Kiến trúc App Router, giao diện phẳng chuẩn doanh nghiệp, tương thích mọi trình duyệt
+  Row 2: Giao diện ứng dụng Desktop | Electron 28, Auto-update, System Tray | Hoạt động đa nền tảng trên Windows, macOS và Linux
+  Row 3: Giao diện lập trình Backend API | Node.js 20 LTS, Express.js, TypeScript | Kiến trúc RESTful API, phân chia Controller và Service mô-đun
+  Row 4: Tầng truy xuất dữ liệu ORM | Prisma ORM phiên bản 5 | Truy vấn an toàn kiểu dữ liệu, tự động hóa di chuyển lược đồ dữ liệu
+  Row 5: Hệ quản trị cơ sở dữ liệu | SQLite trong môi trường phát triển / PostgreSQL | Mô hình cơ sở dữ liệu quan hệ gồm 18 bảng dữ liệu chuẩn hóa
+  Row 6: Cơ chế xác thực người dùng | JSON Web Tokens (JWT), thư viện mã hóa bcryptjs | Xác thực không trạng thái, mã hóa mật khẩu nhiều vòng
+  Row 7: Kiểm soát quyền truy cập | Phần mềm trung gian kiểm tra quyền theo vai trò | Phân định 3 cấp quyền: Quản trị viên, Quản lý nhân sự, Nhân viên
+  Row 8: Tạo tệp tài liệu PDF | Thư viện PDFKit | Kết xuất phiếu lương điện tử và Sơ yếu lý lịch cán bộ mẫu 2C
+  Row 9: Đóng gói và triển khai | Docker và Docker Compose | Đóng gói toàn bộ ngăn xếp dịch vụ phục vụ triển khai nhanh
+  Row 10: Bộ biểu tượng giao diện | Thư viện Lucide React Icons | Biểu tượng dạng véc-tơ tối giản, tải nhanh và đồng nhất phong cách
+
+--- TABLE 4 (19 rows, 3 cols) ---
+  Row 0: Số TT | Tên bảng dữ liệu | Mô tả chức năng và phạm vi lưu trữ
+  Row 1: 1 | users | Lưu trữ tài khoản đăng nhập hệ thống gồm địa chỉ thư điện tử, mật khẩu băm và vai trò quyền hạn.
+  Row 2: 2 | employee_profiles | Lưu trữ hồ sơ nhân sự chi tiết gồm thông tin cá nhân, chức danh, căn cước công dân, mã số thuế, số sổ bảo hiểm, ngân hàng và quỹ phép.
+  Row 3: 3 | contracts | Lưu trữ hợp đồng lao động gồm số hợp đồng, loại hợp đồng, thời hạn hiệu lực, mức lương đóng bảo hiểm và trạng thái hợp đồng.
+  Row 4: 4 | departments | Lưu trữ danh mục phòng ban gồm mã phòng, tên phòng, địa điểm làm việc, ngân sách, trưởng phòng và phó phòng phụ trách.
+  Row 5: 5 | attendances | Lưu trữ nhật ký chấm công điểm danh hằng ngày gồm thời gian vào ca, thời gian ra ca, tổng giờ công và trạng thái chuyên cần.
+  Row 6: 6 | leave_requests | Lưu trữ đơn xin nghỉ phép gồm loại nghỉ phép, khoảng thời gian nghỉ, lý do, người phê duyệt và ý kiến nhận xét.
+  Row 7: 7 | payrolls | Lưu trữ bảng lương hằng tháng gồm lương cơ bản, ngày công thực tế, bù công phép, trích nộp ba quỹ bảo hiểm, giảm trừ gia cảnh, thuế và thực lĩnh.
+  Row 8: 8 | performance_cycles | Lưu trữ thông tin các kỳ đánh giá hiệu suất định kỳ theo quý hoặc năm và liên kết với mẫu tiêu chí đánh giá.
+  Row 9: 9 | performance_reviews | Lưu trữ kết quả đánh giá tổng hợp của nhân sự gồm điểm tự chấm, điểm quản lý chấm, điểm bình quân gia quyền và xếp loại.
+  Row 10: 10 | rewards | Lưu trữ quyết định khen thưởng thi đua gồm số quyết định, danh hiệu khen thưởng, số tiền thưởng, ngày ban hành và lý do thành tích.
+  Row 11: 11 | disciplines | Lưu trữ quyết định xử lý kỷ luật lao động gồm hình thức kỷ luật, mức phạt tài chính, thời hạn hiệu lực và lý do vi phạm.
+  Row 12: 12 | transfer_histories | Lưu trữ lịch sử điều chuyển công tác và bổ nhiệm gồm phòng ban cũ, phòng ban mới, chức vụ mới, mức lương mới và ngày hiệu lực.
+  Row 13: 13 | recruitment_plans | Lưu trữ kế hoạch tuyển dụng nhân sự gồm vị trí công việc, số lượng chỉ tiêu, yêu cầu chuyên môn, hạn nộp hồ sơ và trạng thái.
+  Row 14: 14 | candidates | Lưu trữ hồ sơ ứng viên tham gia tuyển dụng gồm thông tin liên hệ, giai đoạn tuyển dụng hiện tại và nhật ký quá trình phỏng vấn.
+  Row 15: 15 | kpi_templates | Lưu trữ mẫu khung tiêu chí đánh giá hiệu suất định kỳ áp dụng chung cho doanh nghiệp hoặc từng khối chuyên môn.
+  Row 16: 16 | kpi_categories | Lưu trữ các nhóm tiêu chí đánh giá lớn cấu thành mẫu đánh giá cùng tỷ trọng phần trăm của từng nhóm.
+  Row 17: 17 | kpi_criteria | Lưu trữ các chỉ số tiêu chí đánh giá chi tiết, mô tả phương pháp đo lường và tỷ trọng phần trăm cấu thành nhóm tiêu chí.
+  Row 18: 18 | review_scores | Lưu trữ chi tiết điểm số tự chấm của nhân viên và điểm số do cấp quản lý đánh giá cho từng chỉ số tiêu chí cụ thể.

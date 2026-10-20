@@ -7,36 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  ADMIN
-  HR_MANAGER
-  EMPLOYEE
-}
-
-enum LeaveType {
-  ANNUAL
-  SICK
-  UNPAID
-  MATERNITY
-}
-
-enum LeaveStatus {
-  PENDING
-  APPROVED
-  REJECTED
-}
-
-enum ReviewStatus {
-  DRAFT
-  SUBMITTED
-  COMPLETED
-}
-
 model User {
   id           String           @id @default(uuid())
   email        String           @unique
   passwordHash String
-  role         Role             @default(EMPLOYEE)
+  role         String           @default("EMPLOYEE")
   isActive     Boolean          @default(true)
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
@@ -46,34 +21,103 @@ model User {
 }
 
 model EmployeeProfile {
-  id             String              @id @default(uuid())
-  userId         String              @unique
-  user           User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  employeeCode   String              @unique
-  fullName       String
-  dateOfBirth    DateTime?
-  phone          String?
-  address        String?
-  department     String
-  position       String
-  baseSalary     Float
-  allowance      Float               @default(0)
-  joinDate       DateTime            @default(now())
-  avatarUrl      String?
-  attendances    Attendance[]
-  leaveRequests  LeaveRequest[]
-  payrolls       Payroll[]
-  selfReviews    PerformanceReview[] @relation("SelfReviews")
-  managerReviews PerformanceReview[] @relation("ManagerReviews")
+  id                 String              @id @default(uuid())
+  userId             String              @unique
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  employeeCode       String              @unique
+  fullName           String
+  gender             String              @default("Nam") // Nam, Nữ
+  dateOfBirth        DateTime?
+  phone              String?
+  address            String?
+  department         String              // Keep for backward compatibility
+  departmentId       String?
+  departmentRef      Department?         @relation("DepartmentEmployees", fields: [departmentId], references: [id])
+  cadreType          String              @default("STAFF") // "LEADERSHIP" | "MANAGEMENT" | "STAFF"
+  isCadre            Boolean             @default(false)  // true nếu là Cán bộ Lãnh đạo hoặc Quản lý
+  appointmentDate    DateTime?           // Ngày bổ nhiệm chức vụ
+  position           String
+  educationLevel     String              @default("Đại học") // Đại học, Thạc sĩ, Tiến sĩ, Cao đẳng
+  baseSalary         Float
+  allowance          Float               @default(0)
+  joinDate           DateTime            @default(now())
+  lastSalaryRaise    DateTime?           @default(now()) // Niên hạn tăng lương
+  avatarUrl          String?
+  // Thông tin pháp lý & Tài chính doanh nghiệp (Core HRM)
+  idCardNumber         String?             // Số CCCD / CMND
+  idCardIssueDate      DateTime?           // Ngày cấp CCCD
+  idCardIssuePlace     String?             // Nơi cấp CCCD
+  taxCode              String?             // Mã số thuế cá nhân (MST)
+  socialInsuranceNumber String?            // Mã số sổ BHXH
+  bankAccountNumber    String?             // Số tài khoản ngân hàng
+  bankName             String?             // Tên ngân hàng (Vietcombank, Techcombank...)
+  bankBranch           String?             // Chi nhánh ngân hàng
+  lineManagerId        String?             // Quản lý trực tiếp (Line Manager)
+  lineManager          EmployeeProfile?    @relation("LineManagerRelation", fields: [lineManagerId], references: [id])
+  subordinates         EmployeeProfile[]   @relation("LineManagerRelation")
+  annualLeaveBalance   Float               @default(12) // Quỹ phép năm (ngày)
+
+  attendances        Attendance[]
+  leaveRequests      LeaveRequest[]
+  payrolls           Payroll[]
+  selfReviews        PerformanceReview[] @relation("SelfReviews")
+  managerReviews     PerformanceReview[] @relation("ManagerReviews")
+  rewards            Reward[]
+  disciplines        Discipline[]
+  transfers          TransferHistory[]
+  managedDepartments Department[]        @relation("DepartmentManager")
+  deputyDepartments  Department[]        @relation("DepartmentDeputy")
+  contracts          Contract[]
 
   @@map("employee_profiles")
+}
+
+model Contract {
+  id              String          @id @default(uuid())
+  contractNumber  String          @unique // Số hợp đồng, vd: HĐLĐ-2026/001
+  employeeId      String
+  employee        EmployeeProfile @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  contractType    String          @default("INDEFINITE") // PROBATION, DEFINITE_1Y, DEFINITE_3Y, INDEFINITE, SEASONAL
+  jobTitle        String?         // Chức danh công việc theo HĐ
+  startDate       DateTime        // Ngày bắt đầu hiệu lực
+  endDate         DateTime?       // Ngày kết thúc (null nếu không xác định thời hạn)
+  signedDate      DateTime        @default(now()) // Ngày ký
+  salaryInsurance Float           // Mức lương đóng BHXH
+  status          String          @default("ACTIVE") // ACTIVE, EXPIRED, TERMINATED
+  workingTime     String?         @default("Toàn thời gian (40h/tuần)")
+  note            String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@map("contracts")
+}
+
+model Department {
+  id               String            @id @default(uuid())
+  code             String            @unique
+  name             String
+  description      String?
+  location         String?
+  budget           Float?            @default(0)
+  managerId        String?
+  manager          EmployeeProfile?  @relation("DepartmentManager", fields: [managerId], references: [id])
+  deputyId         String?
+  deputy           EmployeeProfile?  @relation("DepartmentDeputy", fields: [deputyId], references: [id])
+  sortOrder        Int               @default(0)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  employees        EmployeeProfile[] @relation("DepartmentEmployees")
+  recruitmentPlans RecruitmentPlan[]
+
+  @@map("departments")
 }
 
 model Attendance {
   id         String          @id @default(uuid())
   employeeId String
   employee   EmployeeProfile @relation(fields: [employeeId], references: [id], onDelete: Cascade)
-  date       DateTime        @db.Date
+  date       DateTime
   checkIn    DateTime?
   checkOut   DateTime?
   workHours  Float           @default(0)
@@ -89,11 +133,11 @@ model LeaveRequest {
   id            String          @id @default(uuid())
   employeeId    String
   employee      EmployeeProfile @relation(fields: [employeeId], references: [id], onDelete: Cascade)
-  leaveType     LeaveType
-  startDate     DateTime        @db.Date
-  endDate       DateTime        @db.Date
+  leaveType     String          @default("ANNUAL")
+  startDate     DateTime
+  endDate       DateTime
   reason        String
-  status        LeaveStatus     @default(PENDING)
+  status        String          @default("PENDING")
   approvedBy    String?
   reviewComment String?
   createdAt     DateTime        @default(now())
@@ -112,7 +156,13 @@ model Payroll {
   actualWorkDays Float
   baseSalary     Float
   allowance      Float           @default(0)
+  rewardAmount   Float           @default(0)
+  insuranceSalary Float?
+  bhxh           Float           @default(0)
+  bhyt           Float           @default(0)
+  bhtn           Float           @default(0)
   deductions     Float           @default(0)
+  taxableIncome  Float           @default(0)
   tax            Float           @default(0)
   netSalary      Float
   isPaid         Boolean         @default(false)
@@ -124,34 +174,182 @@ model Payroll {
 }
 
 model PerformanceCycle {
-  id        String              @id @default(uuid())
-  title     String
-  startDate DateTime
-  endDate   DateTime
-  isActive  Boolean             @default(true)
-  createdAt DateTime            @default(now())
-  reviews   PerformanceReview[]
+  id         String              @id @default(uuid())
+  title      String
+  startDate  DateTime
+  endDate    DateTime
+  isActive   Boolean             @default(true)
+  templateId String?
+  template   KpiTemplate?        @relation(fields: [templateId], references: [id])
+  createdAt  DateTime            @default(now())
+  reviews    PerformanceReview[]
 
   @@map("performance_cycles")
 }
 
 model PerformanceReview {
-  id          String            @id @default(uuid())
-  cycleId     String
-  cycle       PerformanceCycle  @relation(fields: [cycleId], references: [id], onDelete: Cascade)
-  employeeId  String
-  employee    EmployeeProfile   @relation("SelfReviews", fields: [employeeId], references: [id], onDelete: Cascade)
-  reviewerId  String?
-  reviewer    EmployeeProfile?  @relation("ManagerReviews", fields: [reviewerId], references: [id])
-  selfScore   Float?
-  selfComment String?
-  mgrScore    Float?
-  mgrComment  String?
-  finalRating String?
-  status      ReviewStatus      @default(DRAFT)
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  id                 String            @id @default(uuid())
+  cycleId            String
+  cycle              PerformanceCycle  @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+  employeeId         String
+  employee           EmployeeProfile   @relation("SelfReviews", fields: [employeeId], references: [id], onDelete: Cascade)
+  reviewerId         String?
+  reviewer           EmployeeProfile?  @relation("ManagerReviews", fields: [reviewerId], references: [id])
+  templateId         String?
+  template           KpiTemplate?      @relation(fields: [templateId], references: [id])
+  selfScore          Float?
+  selfComment        String?
+  mgrScore           Float?
+  mgrComment         String?
+  totalSelfScore     Float?
+  totalMgrScore      Float?
+  totalWeightedScore Float?
+  autoRating         String?
+  finalRating        String?
+  status             String            @default("DRAFT")
+  scores             ReviewScore[]
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
 
   @@unique([cycleId, employeeId])
   @@map("performance_reviews")
+}
+
+model Reward {
+  id             String          @id @default(uuid())
+  employeeId     String
+  employee       EmployeeProfile @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  decisionNumber String
+  title          String
+  rewardType     String          @default("Bằng khen") // Bằng khen, Giấy khen, Thưởng nóng, Chiến sĩ thi đua
+  amount         Float           @default(0)
+  decisionDate   DateTime
+  reason         String
+  createdAt      DateTime        @default(now())
+
+  @@map("rewards")
+}
+
+model Discipline {
+  id             String          @id @default(uuid())
+  employeeId     String
+  employee       EmployeeProfile @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  decisionNumber String
+  form           String          @default("Khiển trách") // Khiển trách, Cảnh cáo, Hạ bậc lương, Buộc thôi việc
+  penaltyAmount  Float           @default(0)
+  decisionDate   DateTime
+  effectiveDate  DateTime
+  reason         String
+  status         String          @default("ACTIVE") // ACTIVE, EXPIRED
+  createdAt      DateTime        @default(now())
+
+  @@map("disciplines")
+}
+
+model TransferHistory {
+  id             String          @id @default(uuid())
+  employeeId     String
+  employee       EmployeeProfile @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  decisionNumber String
+  fromDepartment String
+  toDepartment   String
+  fromPosition   String
+  toPosition     String
+  oldSalary      Float
+  newSalary      Float
+  transferDate   DateTime
+  note           String?
+  createdAt      DateTime        @default(now())
+
+  @@map("transfer_histories")
+}
+
+model RecruitmentPlan {
+  id            String          @id @default(uuid())
+  title         String
+  department    String
+  departmentId  String?
+  departmentRef Department?     @relation(fields: [departmentId], references: [id])
+  position      String
+  quantity      Int
+  requirements  String
+  status        String          @default("OPEN") // OPEN, IN_PROGRESS, CLOSED
+  deadline      DateTime
+  candidates    Candidate[]
+  createdAt     DateTime        @default(now())
+
+  @@map("recruitment_plans")
+}
+
+model Candidate {
+  id                 String          @id @default(uuid())
+  planId             String
+  plan               RecruitmentPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  fullName           String
+  email              String
+  phone              String
+  status             String          @default("APPLIED") // APPLIED, INTERVIEWING, OFFERED, PROBATION, REJECTED
+  probationMonths    Int?            @default(2)
+  probationStartDate DateTime?
+  probationEndDate   DateTime?
+  notes              String?
+  createdAt          DateTime        @default(now())
+
+  @@map("candidates")
+}
+
+model KpiTemplate {
+  id               String              @id @default(uuid())
+  name             String
+  description      String?
+  isDefault        Boolean             @default(false)
+  targetDepartment String?             @default("ALL") // Mã phòng ban: "ALL", "PB-TECH", "PB-AI", "PB-PROD", "PB-HR", "PB-FIN"
+  targetRole       String?             @default("ALL") // Cấp bậc: "ALL", "CADRE" (Lãnh đạo/Quản lý), "STAFF" (Nhân viên chuyên môn)
+  categories       KpiCategory[]
+  cycles           PerformanceCycle[]
+  reviews          PerformanceReview[]
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  @@map("kpi_templates")
+}
+
+model KpiCategory {
+  id         String        @id @default(uuid())
+  templateId String
+  template   KpiTemplate   @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  name       String
+  weight     Float         // e.g. 0.50 = 50%
+  sortOrder  Int           @default(0)
+  criteria   KpiCriteria[]
+
+  @@map("kpi_categories")
+}
+
+model KpiCriteria {
+  id          String        @id @default(uuid())
+  categoryId  String
+  category    KpiCategory   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  weight      Float         // e.g. 0.40 = 40%
+  sortOrder   Int           @default(0)
+  scores      ReviewScore[]
+
+  @@map("kpi_criteria")
+}
+
+model ReviewScore {
+  id         String            @id @default(uuid())
+  reviewId   String
+  review     PerformanceReview @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  criteriaId String
+  criteria   KpiCriteria       @relation(fields: [criteriaId], references: [id], onDelete: Cascade)
+  selfScore  Float?
+  selfNote   String?
+  mgrScore   Float?
+  mgrNote    String?
+
+  @@unique([reviewId, criteriaId])
+  @@map("review_scores")
 }

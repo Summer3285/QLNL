@@ -1,10 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
 import { ContractService } from '../services/contract.service.js';
+import { AuthenticatedRequest } from '../types/index.js';
 
 export class ContractController {
-  static async getContracts(req: Request, res: Response, next: NextFunction): Promise<void> {
+  static async getContracts(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { employeeId, status, contractType, search } = req.query;
+      let { employeeId, status, contractType, search } = req.query;
+
+      // Siết chặt phân quyền RBAC: Nhân viên thường chỉ được xem hợp đồng của chính mình
+      if (req.user?.role === 'EMPLOYEE') {
+        employeeId = req.user.employeeId;
+      }
+
       const list = await ContractService.getContracts({
         employeeId: employeeId as string,
         status: status as string,

@@ -243,9 +243,13 @@ export default function RecruitmentPage() {
         status: newStatus,
       });
       if (res.success) {
-        setCandidates((prev) =>
-          prev.map((c) => (c.id === candidateId ? { ...c, status: newStatus } : c))
-        );
+        // Refetch both candidates and probation alerts to keep count & banner & probation table in sync
+        const [candsRes, alertsRes] = await Promise.all([
+          api.get('/api/recruitment/candidates'),
+          api.get('/api/recruitment/probation-alerts'),
+        ]);
+        if (candsRes.success) setCandidates(candsRes.data || []);
+        if (alertsRes.success) setAlerts(alertsRes.data || []);
       }
     } catch (err: any) {
       console.error(err);
@@ -257,19 +261,21 @@ export default function RecruitmentPage() {
   const handleOpenOnboardModal = async (c: Candidate) => {
     setSelectedCandidate(c);
     try {
-      // Gợi ý mã nhân viên tự động từ server
-      let suggestedCode = 'NV-022';
+      const deptName = c.plan?.department || 'Software Engineering';
+      const matchedDept = departments.find((d) => d.name === deptName);
+
+      // Gợi ý mã nhân viên tự động từ server theo chuẩn NexNova NN-[MÃ_PHÒNG]-[STT]
+      let suggestedCode = 'NN-ENG-022';
       try {
-        const codeRes = await api.get('/api/recruitment/candidates/next-code');
+        const codeRes = await api.get(
+          `/api/recruitment/candidates/next-code?department=${encodeURIComponent(deptName)}`
+        );
         if (codeRes.success && codeRes.data?.nextCode) {
           suggestedCode = codeRes.data.nextCode;
         }
       } catch (e) {
         // Fallback
       }
-
-      const deptName = c.plan?.department || 'Ban Kỹ Thuật & AI';
-      const matchedDept = departments.find((d) => d.name === deptName);
 
       const defaultSalary = 15000000;
       const defaultInsurance = Math.round(defaultSalary * 0.85);
@@ -531,7 +537,7 @@ export default function RecruitmentPage() {
           }`}
         >
           <Clock className="w-3.5 h-3.5" />
-          <span>Theo Dõi Thử Việc ({candidates.filter((c) => normalizeStatus(c.status) === 'HIRED').length})</span>
+          <span>Theo Dõi Thử Việc ({alerts.length})</span>
           {alerts.length > 0 && (
             <span className="px-1.5 py-0.2 bg-rose-500 text-white text-[10px] rounded-sm font-bold">
               {alerts.length}
@@ -898,73 +904,71 @@ export default function RecruitmentPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {candidates.filter((c) => normalizeStatus(c.status) === 'HIRED').length === 0 ? (
+                {alerts.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="px-4 py-8 text-center text-slate-400">
                       Chưa có nhân sự trong danh sách theo dõi thử việc.
                     </td>
                   </tr>
                 ) : (
-                  candidates
-                    .filter((c) => normalizeStatus(c.status) === 'HIRED')
-                    .map((c) => (
-                      <tr key={c.id} className="hover:bg-slate-50/70 transition-colors">
-                        <td className="px-4 py-3">
-                          <div className="font-semibold text-slate-900">{c.fullName}</div>
-                          <div className="text-[11px] text-slate-400 flex items-center gap-2 mt-0.5">
-                            <span className="flex items-center gap-1"><Mail className="w-3 h-3" /> {c.email}</span>
-                            <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> {c.phone}</span>
+                  alerts.map((c) => (
+                    <tr key={c.id} className="hover:bg-slate-50/70 transition-colors">
+                      <td className="px-4 py-3">
+                        <div className="font-semibold text-slate-900">{c.fullName}</div>
+                        <div className="text-[11px] text-slate-400 flex items-center gap-2 mt-0.5">
+                          <span className="flex items-center gap-1"><Mail className="w-3 h-3" /> {c.email}</span>
+                          <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> {c.phone}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="font-medium text-slate-800">{c.plan?.position || 'Chuyên viên'}</div>
+                        <div className="text-[11px] text-slate-500">{c.plan?.department || 'Kỹ thuật'}</div>
+                      </td>
+                      <td className="px-4 py-3 text-slate-600">
+                        {c.probationStartDate && c.probationEndDate ? (
+                          <div>
+                            <div>Từ: {new Date(c.probationStartDate).toLocaleDateString('vi-VN')}</div>
+                            <div>Đến: {new Date(c.probationEndDate).toLocaleDateString('vi-VN')}</div>
                           </div>
-                        </td>
-                        <td className="px-4 py-3">
-                          <div className="font-medium text-slate-800">{c.plan?.position || 'Chuyên viên'}</div>
-                          <div className="text-[11px] text-slate-500">{c.plan?.department || 'Kỹ thuật'}</div>
-                        </td>
-                        <td className="px-4 py-3 text-slate-600">
-                          {c.probationStartDate && c.probationEndDate ? (
-                            <div>
-                              <div>Từ: {new Date(c.probationStartDate).toLocaleDateString('vi-VN')}</div>
-                              <div>Đến: {new Date(c.probationEndDate).toLocaleDateString('vi-VN')}</div>
-                            </div>
+                        ) : (
+                          <span className="text-slate-400">2 tháng (Quy chuẩn)</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        {c.daysRemaining !== undefined ? (
+                          c.isOverdue || c.isExpired ? (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-rose-50 text-rose-700 border border-rose-200 rounded-sm font-bold">
+                              <AlertTriangle className="w-3 h-3" /> Quá hạn {Math.abs(c.daysRemaining)} ngày
+                            </span>
+                          ) : c.isExpiringSoon ? (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-sm font-bold">
+                              <Clock className="w-3 h-3" /> Còn {c.daysRemaining} ngày
+                            </span>
                           ) : (
-                            <span className="text-slate-400">2 tháng (Quy chuẩn)</span>
-                          )}
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          {c.daysRemaining !== undefined ? (
-                            c.isOverdue ? (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-rose-50 text-rose-700 border border-rose-200 rounded-sm font-bold">
-                                <AlertTriangle className="w-3 h-3" /> Quá hạn {Math.abs(c.daysRemaining)} ngày
-                              </span>
-                            ) : c.isExpiringSoon ? (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-sm font-bold">
-                                <Clock className="w-3 h-3" /> Còn {c.daysRemaining} ngày
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 text-slate-700 rounded-sm">
-                                Còn {c.daysRemaining} ngày
-                              </span>
-                            )
-                          ) : (
-                            <span className="text-slate-400">--</span>
-                          )}
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                            Đã Tiếp Nhận
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-right">
-                          <button
-                            onClick={() => handleOpenOnboardModal(c)}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-sm text-xs font-medium transition-colors"
-                          >
-                            <FileText className="w-3.5 h-3.5 text-slate-500" />
-                            <span>Ký HĐ Chính Thức</span>
-                          </button>
-                        </td>
-                      </tr>
-                    ))
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 text-slate-700 rounded-sm">
+                              Còn {c.daysRemaining} ngày
+                            </span>
+                          )
+                        ) : (
+                          <span className="text-slate-400">--</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                          Đang Thử Việc
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <button
+                          onClick={() => handleOpenOnboardModal(c)}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-sm text-xs font-medium transition-colors"
+                        >
+                          <FileText className="w-3.5 h-3.5 text-slate-500" />
+                          <span>Ký HĐ Chính Thức</span>
+                        </button>
+                      </td>
+                    </tr>
+                  ))
                 )}
               </tbody>
             </table>

@@ -7,6 +7,7 @@ export interface User {
   fullName?: string;
   isActive: boolean;
   createdAt: string;
+  employeeId?: string;
   profile?: EmployeeProfile;
 }
 
@@ -157,10 +158,12 @@ export interface LeaveRequest {
   reviewComment?: string;
   createdAt: string;
   employee?: {
+    id?: string;
     employeeCode: string;
     fullName: string;
     department: string;
     position: string;
+    annualLeaveBalance?: number;
   };
 }
 
@@ -251,6 +254,8 @@ export interface KpiTemplate {
   name: string;
   description?: string;
   isDefault: boolean;
+  targetDepartment?: string;
+  targetRole?: string;
   categories: KpiCategory[];
   _count?: { cycles: number };
 }
@@ -285,6 +290,8 @@ export interface PerformanceReview {
   employee?: EmployeeProfile;
   reviewerId?: string;
   reviewer?: EmployeeProfile;
+  templateId?: string;
+  template?: KpiTemplate;
   selfScore?: number;
   selfComment?: string;
   mgrScore?: number;
@@ -296,7 +303,39 @@ export interface PerformanceReview {
   finalRating?: 'EXCELLENT' | 'GOOD' | 'AVERAGE' | 'NEEDS_IMPROVEMENT' | 'UNSATISFACTORY';
   status: 'DRAFT' | 'SUBMITTED' | 'COMPLETED' | 'CALIBRATED';
   scores?: ReviewScore[];
+  autoMetrics?: AutoPerformanceMetrics | null;
 }
+
+export interface ActiveDisciplineSummary {
+  id: string;
+  decisionNumber: string;
+  form: string;
+  penaltyAmount: number;
+  decisionDate: string;
+  reason: string;
+}
+
+export interface AutoPerformanceMetrics {
+  cycleId?: string;
+  employeeId: string;
+  totalCheckIns: number;
+  lateOrEarlyCount: number;
+  halfDayCount: number;
+  unpaidLeaveDays: number;
+  violationIndex: number;
+  suggestedAttendanceScore: number;
+  attendanceEvidence: string;
+  activeDisciplinesCount: number;
+  activeDisciplines: ActiveDisciplineSummary[];
+  suggestedDisciplineScore: number;
+  disciplineEvidence: string;
+  suggestedScore: number;
+  suggestedRating: 'EXCELLENT' | 'GOOD' | 'AVERAGE' | 'NEEDS_IMPROVEMENT' | 'UNSATISFACTORY';
+  evidenceSummary: string;
+  hasActiveDiscipline: boolean;
+}
+
+
 
 export interface DepartmentStat {
   department: string;

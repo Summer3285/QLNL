@@ -35,10 +35,10 @@ export class EmployeeService {
 
     if (search) {
       where.OR = [
-        { fullName: { contains: search, mode: 'insensitive' } },
-        { employeeCode: { contains: search, mode: 'insensitive' } },
-        { position: { contains: search, mode: 'insensitive' } },
-        { user: { email: { contains: search, mode: 'insensitive' } } },
+        { fullName: { contains: search } },
+        { employeeCode: { contains: search } },
+        { position: { contains: search } },
+        { user: { email: { contains: search } } },
       ];
     }
 

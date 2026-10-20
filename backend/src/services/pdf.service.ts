@@ -29,6 +29,15 @@ interface PayslipData {
   isPaid: boolean;
 }
 
+export function removeVietnameseTones(str: string): string {
+  if (!str) return '';
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D');
+}
+
 export class PdfService {
   static generatePayslipPdf(data: PayslipData): Promise<Buffer> {
     return new Promise((resolve, reject) => {
@@ -40,22 +49,24 @@ export class PdfService {
         doc.on('end', () => resolve(Buffer.concat(buffers)));
         doc.on('error', (err) => reject(err));
 
+        const s = (val?: string | number | null) => {
+          if (val === null || val === undefined) return '';
+          return removeVietnameseTones(String(val));
+        };
+
         const formatVND = (num: number) => {
-          return new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-          }).format(num);
+          return new Intl.NumberFormat('en-US').format(Math.round(num)) + ' VND';
         };
 
         // Header Background Banner
         doc.rect(40, 35, 515, 65).fill('#0f172a');
 
-        doc.fillColor('#ffffff').fontSize(16).text(data.companyName.toUpperCase(), 55, 45);
+        doc.fillColor('#ffffff').fontSize(16).text(s(data.companyName).toUpperCase(), 55, 45);
         doc
           .fontSize(8.5)
           .fillColor('#94a3b8')
-          .text(`Enterprise Human Resource Management | Tax Code: ${data.taxCode}`, 55, 68)
-          .text(`Address: ${data.address}`, 55, 80);
+          .text(`Enterprise Human Resource Management | Tax Code: ${s(data.taxCode)}`, 55, 68)
+          .text(`Address: ${s(data.address)}`, 55, 80);
 
         // Title
         doc.fillColor('#0f172a').fontSize(15).text('MONTHLY SALARY PAYSLIP / PHIEU LUONG', 40, 115, {
@@ -74,24 +85,24 @@ export class PdfService {
         doc.fillColor('#1e293b').fontSize(9);
 
         doc.font('Helvetica-Bold').text('Employee Code:', 55, 168);
-        doc.font('Helvetica').text(data.employeeCode, 145, 168);
+        doc.font('Helvetica').text(s(data.employeeCode), 145, 168);
 
         doc.font('Helvetica-Bold').text('Full Name:', 55, 184);
-        doc.font('Helvetica').text(data.fullName, 145, 184);
+        doc.font('Helvetica').text(s(data.fullName), 145, 184);
 
         doc.font('Helvetica-Bold').text('Email:', 55, 200);
-        doc.font('Helvetica').text(data.email, 145, 200);
+        doc.font('Helvetica').text(s(data.email), 145, 200);
 
         doc.font('Helvetica-Bold').text('Department:', 320, 168);
-        doc.font('Helvetica').text(data.department, 410, 168);
+        doc.font('Helvetica').text(s(data.department), 410, 168);
 
         doc.font('Helvetica-Bold').text('Position:', 320, 184);
-        doc.font('Helvetica').text(data.position, 410, 184);
+        doc.font('Helvetica').text(s(data.position), 410, 184);
 
         doc.font('Helvetica-Bold').text('Bank Account:', 320, 200);
         doc
           .font('Helvetica')
-          .text(data.bankAccount ? `${data.bankAccount} (${data.bankName || 'NH'})` : 'Chua cap nhat', 410, 200);
+          .text(data.bankAccount ? `${s(data.bankAccount)} (${s(data.bankName) || 'NH'})` : 'Chua cap nhat', 410, 200);
 
         doc.font('Helvetica-Bold').text('Status:', 55, 216);
         doc
@@ -125,8 +136,8 @@ export class PdfService {
             .fillColor(isBold ? '#0f172a' : '#334155')
             .font(isBold ? 'Helvetica-Bold' : 'Helvetica')
             .fontSize(8.5);
-          doc.text(title, 55, y + 5);
-          doc.text(desc, 220, y + 5);
+          doc.text(s(title), 55, y + 5);
+          doc.text(s(desc), 220, y + 5);
           doc.text(amount, 430, y + 5, { width: 110, align: 'right' });
           y += 20;
         };
@@ -152,7 +163,7 @@ export class PdfService {
         addRow('5. Social Insurance (BHXH 8%)', 'Quy BHXH bat buoc NLD dong', `- ${formatVND(bhxh)}`);
         addRow('6. Health Insurance (BHYT 1.5%)', 'Quy BHYT bat buoc NLD dong', `- ${formatVND(bhyt)}`);
         addRow('7. Unemployment Ins. (BHTN 1%)', 'Quy BHTN bat buoc NLD dong', `- ${formatVND(bhtn)}`);
-        addRow('8. Personal Tax Relief', 'Giam tru gia canh ban than (11M/thang)', '- 11,000,000 d');
+        addRow('8. Personal Tax Relief', 'Giam tru gia canh ban than (11M/thang)', '- 11,000,000 VND');
         if (data.taxableIncome !== undefined && data.taxableIncome > 0) {
           addRow('Taxable Income (TNTT)', 'Thu nhap tinh thue sau giam tru', formatVND(data.taxableIncome), false, true);
         }

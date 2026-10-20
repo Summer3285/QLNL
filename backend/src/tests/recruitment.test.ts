@@ -54,10 +54,10 @@ describe('Recruitment & One-Click Onboarding Service (Enterprise Unit Tests)', (
     }
   });
 
-  it('should generate a valid next employee code format (NV-xxx)', async () => {
+  it('should generate a valid next employee code format according to NexNova standard (NN-[DEPT]-xxx)', async () => {
     const code = await RecruitmentService.getNextEmployeeCode();
-    assert.ok(code.startsWith('NV-'), 'Mã nhân viên phải bắt đầu bằng NV-');
-    assert.ok(code.length >= 6, 'Mã nhân viên phải có độ dài tối thiểu 6 ký tự');
+    assert.ok(code.startsWith('NN-'), 'Mã nhân viên chuẩn NexNova phải bắt đầu bằng NN-');
+    assert.ok(code.length >= 8, 'Mã nhân viên phải có định dạng NN-[DEPT]-[STT]');
   });
 
   it('should successfully update candidate status through pipeline stages', async () => {

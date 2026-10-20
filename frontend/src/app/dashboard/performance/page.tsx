@@ -9,7 +9,9 @@ import {
   KpiTemplate,
   KpiCategory,
   KpiCriteria,
+  AutoPerformanceMetrics,
 } from '../../../types';
+
 import { formatDate } from '../../../lib/utils';
 import Modal from '../../../components/Modal';
 import {
@@ -31,7 +33,160 @@ import {
   Layers,
   ArrowRight,
   Filter,
+  Briefcase,
+  Users,
+  Cpu,
 } from 'lucide-react';
+
+const isDisciplineCategory = (catName: string, catIdx?: number) => {
+  if (catIdx === 3) return true;
+  const lower = (catName || '').toLowerCase();
+  return (
+    lower.includes('kỷ luật') ||
+    lower.includes('discipline') ||
+    lower.includes('governance') ||
+    lower.includes('compliance') ||
+    lower.includes('tuân thủ')
+  );
+};
+
+function AttendanceDisciplineAuditBanner({
+  autoMetrics,
+  onApply,
+  title,
+}: {
+  autoMetrics?: AutoPerformanceMetrics | null;
+  onApply: () => void;
+  title: string;
+}) {
+  if (!autoMetrics) return null;
+
+  const hasIssues = autoMetrics.hasActiveDiscipline || autoMetrics.violationIndex > 2;
+  const isSevere = autoMetrics.hasActiveDiscipline && autoMetrics.suggestedDisciplineScore <= 2;
+
+  const bgBorderClass = isSevere
+    ? 'bg-rose-50/80 border-rose-300'
+    : hasIssues
+    ? 'bg-amber-50/80 border-amber-300'
+    : 'bg-emerald-50/80 border-emerald-300';
+
+  const titleColor = isSevere
+    ? 'text-rose-900'
+    : hasIssues
+    ? 'text-amber-900'
+    : 'text-emerald-900';
+
+  return (
+    <div className={`p-4 rounded-sm border ${bgBorderClass} mb-4 space-y-3 shadow-none`}>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div
+            className={`w-8 h-8 rounded-sm flex items-center justify-center font-bold shrink-0 ${
+              isSevere
+                ? 'bg-rose-100 text-rose-700'
+                : hasIssues
+                ? 'bg-amber-100 text-amber-800'
+                : 'bg-emerald-100 text-emerald-800'
+            }`}
+          >
+            <Sparkles className="w-4 h-4" />
+          </div>
+          <div>
+            <h5 className={`text-xs font-bold uppercase tracking-wider ${titleColor}`}>
+              {title}
+            </h5>
+            <p className="text-[11px] text-slate-600">
+              Hệ thống tự động liên thông dữ liệu từ phân hệ Chấm công, Nghỉ phép &amp; Kỷ luật lao động
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={onApply}
+          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-sm bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors shrink-0 shadow-none cursor-pointer"
+        >
+          <CheckCircle2 className="w-3.5 h-3.5" />
+          <span>Áp Dụng Điểm Đối Soát Tự Động</span>
+        </button>
+      </div>
+
+      {/* 2 Badges/Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+        {/* Badge 1: Chuyên cần */}
+        <div className="bg-white/95 border border-slate-200/90 rounded-sm p-3 space-y-1.5 shadow-none">
+          <div className="flex items-center justify-between">
+            <span className="font-bold text-slate-800 flex items-center gap-1.5 text-xs">
+              <Calendar className="w-3.5 h-3.5 text-blue-600" />
+              <span>Chấm Công &amp; Chuyên Cần</span>
+            </span>
+            <span
+              className={`px-2 py-0.5 rounded-sm font-bold font-mono text-[11px] ${
+                autoMetrics.suggestedAttendanceScore >= 4
+                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                  : autoMetrics.suggestedAttendanceScore === 3
+                  ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                  : 'bg-rose-50 text-rose-700 border border-rose-200'
+              }`}
+            >
+              Đề xuất: {autoMetrics.suggestedAttendanceScore}/5 ★
+            </span>
+          </div>
+          <div className="text-[11px] text-slate-600 space-y-0.5">
+            <div>
+              • Điểm danh: <strong className="text-slate-800">{autoMetrics.totalCheckIns}</strong> buổi
+              {' | '}Đi muộn/về sớm: <strong className={autoMetrics.lateOrEarlyCount > 0 ? 'text-amber-700' : 'text-slate-800'}>{autoMetrics.lateOrEarlyCount}</strong> lần
+              {' | '}Nghỉ không lương: <strong className={autoMetrics.unpaidLeaveDays > 0 ? 'text-rose-700' : 'text-slate-800'}>{autoMetrics.unpaidLeaveDays}</strong> ngày
+            </div>
+            <div>
+              • Chỉ số vi phạm: <strong className="font-mono text-slate-800">V = {autoMetrics.violationIndex}</strong>
+            </div>
+          </div>
+        </div>
+
+        {/* Badge 2: Kỷ luật */}
+        <div className="bg-white/95 border border-slate-200/90 rounded-sm p-3 space-y-1.5 shadow-none">
+          <div className="flex items-center justify-between">
+            <span className="font-bold text-slate-800 flex items-center gap-1.5 text-xs">
+              <ShieldCheck className="w-3.5 h-3.5 text-purple-600" />
+              <span>Kỷ Luật Lao Động</span>
+            </span>
+            <span
+              className={`px-2 py-0.5 rounded-sm font-bold font-mono text-[11px] ${
+                autoMetrics.hasActiveDiscipline
+                  ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                  : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+              }`}
+            >
+              Trần điểm: {autoMetrics.suggestedDisciplineScore}/5 ★
+            </span>
+          </div>
+          <div className="text-[11px] text-slate-600 space-y-0.5">
+            <div>
+              • {autoMetrics.hasActiveDiscipline ? (
+                <span className="text-rose-700 font-semibold">
+                  Phát hiện {autoMetrics.activeDisciplinesCount} quyết định kỷ luật đang có hiệu lực thi hành
+                </span>
+              ) : (
+                <span className="text-emerald-700 font-semibold">
+                  Chấp hành tốt nội quy, 0 vi phạm kỷ luật đang có hiệu lực
+                </span>
+              )}
+            </div>
+            {autoMetrics.hasActiveDiscipline && autoMetrics.activeDisciplines && autoMetrics.activeDisciplines.length > 0 && (
+              <div
+                className="text-[10px] text-slate-500 truncate"
+                title={autoMetrics.activeDisciplines.map((d) => `${d.decisionNumber} - ${d.form}: ${d.reason}`).join('; ')}
+              >
+                Chi tiết: {autoMetrics.activeDisciplines.map((d) => `${d.decisionNumber} (${d.form})`).join(', ')}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function PerformancePage() {
   const { user, isHR } = useAuth();
@@ -42,6 +197,7 @@ export default function PerformancePage() {
   const [reviews, setReviews] = useState<PerformanceReview[]>([]);
   const [myReview, setMyReview] = useState<PerformanceReview | null>(null);
   const [templates, setTemplates] = useState<KpiTemplate[]>([]);
+  const [selectedTemplateViewId, setSelectedTemplateViewId] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
   // Self review criteria scores: map criteriaId -> { score: number, note: string }
@@ -93,6 +249,9 @@ export default function PerformancePage() {
       const res = await api.get('/api/performance/templates');
       if (res.success && res.data) {
         setTemplates(res.data);
+        if (res.data.length > 0) {
+          setSelectedTemplateViewId((prev) => prev || res.data[0].id);
+        }
       }
     } catch (err) {
       console.error('Lỗi tải bộ tiêu chí:', err);
@@ -102,7 +261,7 @@ export default function PerformancePage() {
   // 2. Fetch Cycle Reviews, My Review & Calibration Data
   const fetchCycleData = async (cycleId: string) => {
     try {
-      if (isHR) {
+      if (isHR && user?.role !== 'EMPLOYEE') {
         const res = await api.get(`/api/performance/cycles/${cycleId}/reviews`);
         if (res.success && res.data) {
           setReviews(res.data);
@@ -144,23 +303,67 @@ export default function PerformancePage() {
     fetchTemplates();
   }, []);
 
+  // Standard fallback default template
+  const defaultTemplate = useMemo(() => {
+    return templates.find((t) => t.isDefault) || templates[0] || null;
+  }, [templates]);
+
+  // Template resolved for current user self-review
+  const activeSelfTemplate = useMemo(() => {
+    return (
+      myReview?.template ||
+      templates.find((t) => t.id === myReview?.templateId) ||
+      myReview?.cycle?.template ||
+      selectedCycle?.template ||
+      defaultTemplate
+    );
+  }, [myReview, templates, selectedCycle, defaultTemplate]);
+
+  const selfCategories = useMemo(() => {
+    return activeSelfTemplate?.categories || [];
+  }, [activeSelfTemplate]);
+
+  // Template resolved for employee currently evaluated by manager
+  const evaluatingTemplate = useMemo(() => {
+    if (!evaluatingReview) return selectedCycle?.template || defaultTemplate;
+    return (
+      evaluatingReview.template ||
+      templates.find((t) => t.id === evaluatingReview.templateId) ||
+      evaluatingReview.cycle?.template ||
+      selectedCycle?.template ||
+      defaultTemplate
+    );
+  }, [evaluatingReview, templates, selectedCycle, defaultTemplate]);
+
+  // Selected template currently being inspected in Tab 4
+  const currentViewTemplate = useMemo(() => {
+    if (!templates || templates.length === 0) return null;
+    return templates.find((t) => t.id === selectedTemplateViewId) || templates[0];
+  }, [templates, selectedTemplateViewId]);
+
   useEffect(() => {
     if (selectedCycle) {
       fetchCycleData(selectedCycle.id);
-      // Expand all categories by default
-      if (selectedCycle.template?.categories) {
-        const exp: Record<string, boolean> = {};
-        selectedCycle.template.categories.forEach((cat) => {
-          exp[cat.id] = true;
-        });
-        setExpandedCategories(exp);
-      }
     }
-  }, [selectedCycle, isHR]);
+  }, [selectedCycle, isHR, user?.role]);
 
-  // Compute live weighted self score
+  useEffect(() => {
+    if (selfCategories.length > 0) {
+      setExpandedCategories((prev) => {
+        const next = { ...prev };
+        selfCategories.forEach((cat) => {
+          if (next[cat.id] === undefined) {
+            next[cat.id] = true;
+          }
+        });
+        return next;
+      });
+    }
+  }, [selfCategories]);
+
+  // Compute live weighted self score on 5.00 scale
   const liveSelfWeightedScore = useMemo(() => {
-    const cats = selectedCycle?.template?.categories;
+    const cats = selfCategories;
     if (!cats || cats.length === 0) return null;
 
     let totalScore = 0;
@@ -188,11 +391,11 @@ export default function PerformancePage() {
       return Number((totalScore / totalCatWeight).toFixed(2));
     }
     return 5;
-  }, [selectedCycle, criteriaScores]);
+  }, [selfCategories, criteriaScores]);
 
   // Compute live manager weighted score during evaluation
   const liveMgrWeightedScore = useMemo(() => {
-    const cats = selectedCycle?.template?.categories;
+    const cats = evaluatingTemplate?.categories;
     if (!cats || cats.length === 0) return null;
 
     let totalScore = 0;
@@ -220,7 +423,66 @@ export default function PerformancePage() {
       return Number((totalScore / totalCatWeight).toFixed(2));
     }
     return 5;
-  }, [selectedCycle, mgrCriteriaScores]);
+  }, [evaluatingTemplate, mgrCriteriaScores]);
+
+  // Helper: Badge for template differentiation
+  const getTemplateBadge = (template?: KpiTemplate | null) => {
+    if (!template) {
+      return (
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-sm text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+          <Layers className="w-3 h-3 text-slate-500" />
+          <span>Khung Tiêu Chí Chuẩn</span>
+        </span>
+      );
+    }
+    const targetRole = template.targetRole || 'ALL';
+    const targetDept = template.targetDepartment || 'ALL';
+
+    if (targetRole === 'CADRE') {
+      return (
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-sm text-[11px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
+          <ShieldCheck className="w-3 h-3 text-purple-600" />
+          <span>Cấp Quản Trị & Lãnh Đạo</span>
+        </span>
+      );
+    }
+
+    if (targetDept.includes('PB-TECH') || targetDept.includes('PB-AI')) {
+      return (
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-sm text-[11px] font-bold bg-cyan-50 text-cyan-700 border border-cyan-200">
+          <Sparkles className="w-3 h-3 text-cyan-600" />
+          <span>Khối Kỹ Sư Phần Mềm & AI</span>
+        </span>
+      );
+    }
+
+    if (targetDept.includes('PB-PROD') || targetDept.includes('PB-HR') || targetDept.includes('PB-FIN')) {
+      return (
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-sm text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+          <Briefcase className="w-3 h-3 text-amber-600" />
+          <span>Khối Sản Phẩm & Vận Hành</span>
+        </span>
+      );
+    }
+
+    return (
+      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-sm text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+        <span>Khung Chuẩn Toàn Công Ty</span>
+      </span>
+    );
+  };
+
+  const getTargetAudienceText = (template?: KpiTemplate | null) => {
+    if (!template) return 'Toàn bộ nhân sự';
+    const targetRole = template.targetRole || 'ALL';
+    const targetDept = template.targetDepartment || 'ALL';
+
+    if (targetRole === 'CADRE') return 'Cán bộ Lãnh đạo, Trưởng/Phó phòng ban & Giám đốc bộ phận';
+    if (targetDept.includes('PB-TECH') || targetDept.includes('PB-AI')) return 'Kỹ sư Phần mềm, AI & Khoa học dữ liệu (PB-TECH, PB-AI)';
+    if (targetDept.includes('PB-PROD') || targetDept.includes('PB-HR') || targetDept.includes('PB-FIN')) return 'Chuyên viên Khối Sản phẩm, Nhân sự & Tài chính - Vận hành (PB-PROD, PB-HR, PB-FIN)';
+    return 'Khung tiêu chí chuẩn hóa chung cho toàn thể cán bộ nhân viên NexNova';
+  };
 
   const getRatingBadge = (rating?: string | null) => {
     if (!rating) return <span className="text-slate-400">---</span>;
@@ -275,7 +537,7 @@ export default function PerformancePage() {
     setSelfSubmitting(true);
     setSelfMessage(null);
 
-    const cats = selectedCycle.template?.categories || [];
+    const cats = selfCategories;
     const formattedScores: Array<{ criteriaId: string; selfScore: number; selfNote?: string }> = [];
 
     cats.forEach((cat) => {
@@ -306,23 +568,113 @@ export default function PerformancePage() {
     }
   };
 
+  // Áp dụng điểm và minh chứng đối soát tự động cho bản Tự đánh giá
+  const handleApplyAutoMetricsForSelf = (cat: KpiCategory) => {
+    if (!myReview?.autoMetrics) return;
+    const {
+      suggestedAttendanceScore,
+      attendanceEvidence,
+      suggestedDisciplineScore,
+      disciplineEvidence,
+    } = myReview.autoMetrics;
+
+    setCriteriaScores((prev) => {
+      const next = { ...prev };
+      cat.criteria.forEach((cri) => {
+        const lower = cri.name.toLowerCase();
+        if (lower.includes('chuyên cần') || lower.includes('giờ giấc')) {
+          next[cri.id] = { score: suggestedAttendanceScore, note: attendanceEvidence };
+        } else if (
+          lower.includes('tuân thủ nội quy') ||
+          lower.includes('bảo mật') ||
+          lower.includes('kỷ luật') ||
+          lower.includes('an toàn') ||
+          lower.includes('quản trị rủi ro')
+        ) {
+          next[cri.id] = { score: suggestedDisciplineScore, note: disciplineEvidence };
+        }
+      });
+      return next;
+    });
+    setSelfMessage('Đã tự động điền điểm và minh chứng từ hệ thống Chấm công & Kỷ luật!');
+  };
+
+  // Áp dụng điểm và minh chứng đối soát tự động cho Quản lý đánh giá
+  const handleApplyAutoMetricsForManager = (cat: KpiCategory) => {
+    if (!evaluatingReview?.autoMetrics) return;
+    const {
+      suggestedAttendanceScore,
+      attendanceEvidence,
+      suggestedDisciplineScore,
+      disciplineEvidence,
+    } = evaluatingReview.autoMetrics;
+
+    setMgrCriteriaScores((prev) => {
+      const next = { ...prev };
+      cat.criteria.forEach((cri) => {
+        const lower = cri.name.toLowerCase();
+        if (lower.includes('chuyên cần') || lower.includes('giờ giấc')) {
+          next[cri.id] = { score: suggestedAttendanceScore, note: attendanceEvidence };
+        } else if (
+          lower.includes('tuân thủ nội quy') ||
+          lower.includes('bảo mật') ||
+          lower.includes('kỷ luật') ||
+          lower.includes('an toàn') ||
+          lower.includes('quản trị rủi ro')
+        ) {
+          next[cri.id] = { score: suggestedDisciplineScore, note: disciplineEvidence };
+        }
+      });
+      return next;
+    });
+  };
+
   // Open Manager Evaluation Modal
   const handleOpenEvaluationModal = (rev: PerformanceReview) => {
     setEvaluatingReview(rev);
     setMgrComment(rev.mgrComment || '');
 
+    const tpl =
+      rev.template ||
+      templates.find((t) => t.id === rev.templateId) ||
+      rev.cycle?.template ||
+      selectedCycle?.template ||
+      defaultTemplate;
+
     const map: Record<string, { score: number; note: string }> = {};
-    if (selectedCycle?.template?.categories) {
-      selectedCycle.template.categories.forEach((cat) => {
-        cat.criteria.forEach((cri) => {
-          const existingScore = rev.scores?.find((s) => s.criteriaId === cri.id);
-          map[cri.id] = {
-            score: existingScore?.mgrScore || existingScore?.selfScore || 5,
-            note: existingScore?.mgrNote || '',
-          };
-        });
+    const cats = tpl?.categories || [];
+    cats.forEach((cat) => {
+      cat.criteria.forEach((cri) => {
+        const existingScore = rev.scores?.find((s) => s.criteriaId === cri.id);
+        const lower = cri.name.toLowerCase();
+        let defaultScore = existingScore?.mgrScore || existingScore?.selfScore;
+        let defaultNote = existingScore?.mgrNote || existingScore?.selfNote;
+
+        // Tự động điền điểm & minh chứng nếu tiêu chí thuộc nhóm kỷ luật / chuyên cần chưa có dữ liệu
+        if (defaultScore === undefined || defaultScore === null) {
+          if (rev.autoMetrics) {
+            if (lower.includes('chuyên cần') || lower.includes('giờ giấc')) {
+              defaultScore = rev.autoMetrics.suggestedAttendanceScore;
+              defaultNote = defaultNote || rev.autoMetrics.attendanceEvidence;
+            } else if (
+              lower.includes('tuân thủ nội quy') ||
+              lower.includes('bảo mật') ||
+              lower.includes('kỷ luật') ||
+              lower.includes('an toàn') ||
+              lower.includes('quản trị rủi ro')
+            ) {
+              defaultScore = rev.autoMetrics.suggestedDisciplineScore;
+              defaultNote = defaultNote || rev.autoMetrics.disciplineEvidence;
+            }
+          }
+        }
+
+        map[cri.id] = {
+          score: defaultScore || 5,
+          note: defaultNote || '',
+        };
       });
-    }
+    });
     setMgrCriteriaScores(map);
     setFinalRating((rev.finalRating as any) || (rev.autoRating as any) || 'EXCELLENT');
   };
@@ -334,7 +686,8 @@ export default function PerformancePage() {
     setMgrSubmitting(true);
 
     const formattedScores: Array<{ criteriaId: string; mgrScore: number; mgrNote?: string }> = [];
-    selectedCycle.template?.categories.forEach((cat) => {
+    const cats = evaluatingTemplate?.categories || [];
+    cats.forEach((cat) => {
       cat.criteria.forEach((cri) => {
         const val = mgrCriteriaScores[cri.id] || { score: 5, note: '' };
         formattedScores.push({
@@ -545,13 +898,26 @@ export default function PerformancePage() {
           <div className="bg-blue-900 border border-blue-800 rounded-sm p-6 text-white shadow-none relative overflow-hidden">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-sm bg-blue-500/30 text-blue-200 border border-blue-400/30">
-                  {myReview?.status === 'COMPLETED' ? 'Đã Hoàn Tất Đánh Giá' : 'Đang Thực Hiện Tự Đánh Giá'}
-                </span>
-                <h3 className="text-xl font-bold mt-2">Bản Tự Đánh Giá Hiệu Suất Theo Trọng Số</h3>
-                <p className="text-xs text-blue-100/80 mt-1 max-w-xl">
-                  Hãy chấm điểm khách quan từ 1 đến 5 sao cho từng tiêu chí thuộc 4 nhóm năng lực. Điểm tổng hợp sẽ được tính toán tự động dựa trên trọng số chuẩn hóa.
-                </p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-sm bg-blue-500/30 text-blue-200 border border-blue-400/30">
+                    {myReview?.status === 'COMPLETED' ? 'Đã Hoàn Tất Đánh Giá' : 'Đang Thực Hiện Tự Đánh Giá'}
+                  </span>
+                  {activeSelfTemplate && (
+                    <div className="inline-flex items-center">
+                      {getTemplateBadge(activeSelfTemplate)}
+                    </div>
+                  )}
+                </div>
+                <h3 className="text-xl font-bold mt-2.5">Bản Tự Đánh Giá Hiệu Suất Theo Trọng Số</h3>
+                <div className="text-xs text-blue-100/90 mt-1 max-w-xl space-y-1">
+                  <p className="font-semibold text-amber-200 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                    <span>Bộ tiêu chí áp dụng: {activeSelfTemplate?.name || 'Khung Chuẩn NexNova'}</span>
+                  </p>
+                  <p className="text-blue-200/80">
+                    {activeSelfTemplate?.description || 'Hãy chấm điểm khách quan từ 1 đến 5 sao cho từng tiêu chí thuộc 4 nhóm năng lực. Điểm tổng hợp sẽ được tính toán tự động dựa trên trọng số chuẩn hóa.'}
+                  </p>
+                </div>
               </div>
 
               {/* Score Display Card */}
@@ -623,7 +989,12 @@ export default function PerformancePage() {
           {/* Form */}
           <form onSubmit={handleSubmitSelfReview} className="space-y-6">
             {/* Accordion Categories */}
-            {selectedCycle?.template?.categories.map((cat, catIdx) => {
+            {selfCategories.length === 0 ? (
+              <div className="p-8 text-center bg-white border border-slate-200 rounded-sm">
+                <p className="text-sm text-slate-500">Chưa có nhóm tiêu chí nào được thiết lập cho kỳ đánh giá này.</p>
+              </div>
+            ) : (
+              selfCategories.map((cat, catIdx) => {
               const isExpanded = expandedCategories[cat.id] ?? true;
 
               // Calculate category average
@@ -679,6 +1050,13 @@ export default function PerformancePage() {
                   {/* Criteria Items */}
                   {isExpanded && (
                     <div className="divide-y divide-slate-100 p-2 sm:p-4">
+                      {isDisciplineCategory(cat.name, catIdx) && myReview?.autoMetrics && (
+                        <AttendanceDisciplineAuditBanner
+                          autoMetrics={myReview.autoMetrics}
+                          onApply={() => handleApplyAutoMetricsForSelf(cat)}
+                          title="Dữ Liệu Đối Soát Chuyên Cần & Kỷ Luật Lao Động Cá Nhân"
+                        />
+                      )}
                       {cat.criteria.map((cri) => {
                         const curScore = criteriaScores[cri.id]?.score ?? 5;
                         const curNote = criteriaScores[cri.id]?.note ?? '';
@@ -759,7 +1137,7 @@ export default function PerformancePage() {
                   )}
                 </div>
               );
-            })}
+            }))}
 
             {/* General Self Comment */}
             <div className="bg-white border border-slate-200 rounded-sm p-5 shadow-none space-y-3">
@@ -821,6 +1199,7 @@ export default function PerformancePage() {
                 <tr>
                   <th className="px-5 py-3.5">Mã & Họ Tên</th>
                   <th className="px-5 py-3.5">Phòng ban & Vị trí</th>
+                  <th className="px-5 py-3.5">Bộ Tiêu Chí KPI</th>
                   <th className="px-5 py-3.5 text-center">Điểm Tự Chấm</th>
                   <th className="px-5 py-3.5 text-center">Điểm Quản Lý</th>
                   <th className="px-5 py-3.5 text-center">Xếp Loại</th>
@@ -831,51 +1210,67 @@ export default function PerformancePage() {
               <tbody className="divide-y divide-slate-100">
                 {reviews.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="text-center py-10 text-slate-400">
+                    <td colSpan={8} className="text-center py-10 text-slate-400">
                       Chưa có nhân viên nào gửi bản tự đánh giá trong kỳ này.
                     </td>
                   </tr>
                 ) : (
-                  reviews.map((rev) => (
-                    <tr key={rev.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="px-5 py-4">
-                        <div className="font-bold text-slate-900">{rev.employee?.fullName}</div>
-                        <div className="text-[11px] font-mono text-blue-600">{rev.employee?.employeeCode}</div>
-                      </td>
-                      <td className="px-5 py-4">
-                        <div className="font-medium text-slate-800">{rev.employee?.department}</div>
-                        <div className="text-[11px] text-slate-500">{rev.employee?.position}</div>
-                      </td>
-                      <td className="px-5 py-4 text-center font-mono font-bold text-amber-600">
-                        {rev.totalSelfScore ? `${rev.totalSelfScore.toFixed(2)} ★` : rev.selfScore ? `${rev.selfScore} ★` : '---'}
-                      </td>
-                      <td className="px-5 py-4 text-center font-mono font-bold text-blue-600">
-                        {rev.totalMgrScore ? `${rev.totalMgrScore.toFixed(2)} ★` : rev.mgrScore ? `${rev.mgrScore} ★` : '---'}
-                      </td>
-                      <td className="px-5 py-4 text-center">
-                        {getRatingBadge(rev.finalRating || rev.autoRating)}
-                      </td>
-                      <td className="px-5 py-4 text-center">
-                        <span
-                          className={`inline-flex items-center px-2.5 py-0.5 rounded-sm text-[10px] font-bold ${
-                            rev.status === 'COMPLETED'
-                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                              : 'bg-amber-50 text-amber-700 border border-amber-200'
-                          }`}
-                        >
-                          {rev.status === 'COMPLETED' ? 'Đã hoàn tất' : 'Chờ quản lý'}
-                        </span>
-                      </td>
-                      <td className="px-5 py-4 text-right">
-                        <button
-                          onClick={() => handleOpenEvaluationModal(rev)}
-                          className="px-3.5 py-1.5 rounded-sm bg-white hover:bg-slate-50 text-blue-600 hover:text-blue-700 border border-slate-200 font-semibold text-xs transition-all shadow-none"
-                        >
-                          {rev.status === 'COMPLETED' ? 'Xem & Chấm Lại' : 'Chấm Điểm Đối Chiếu'}
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                  reviews.map((rev) => {
+                    const revTpl =
+                      rev.template ||
+                      templates.find((t) => t.id === rev.templateId) ||
+                      rev.cycle?.template ||
+                      defaultTemplate;
+
+                    return (
+                      <tr key={rev.id} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="px-5 py-4">
+                          <div className="font-bold text-slate-900">{rev.employee?.fullName}</div>
+                          <div className="text-[11px] font-mono text-blue-600">{rev.employee?.employeeCode}</div>
+                        </td>
+                        <td className="px-5 py-4">
+                          <div className="font-medium text-slate-800">{rev.employee?.department}</div>
+                          <div className="text-[11px] text-slate-500">{rev.employee?.position}</div>
+                        </td>
+                        <td className="px-5 py-4">
+                          <div className="flex flex-col gap-1 items-start">
+                            {getTemplateBadge(revTpl)}
+                            <span className="text-[10px] text-slate-500 truncate max-w-[170px]" title={revTpl?.name}>
+                              {revTpl?.name}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-5 py-4 text-center font-mono font-bold text-amber-600">
+                          {rev.totalSelfScore ? `${rev.totalSelfScore.toFixed(2)} ★` : rev.selfScore ? `${rev.selfScore} ★` : '---'}
+                        </td>
+                        <td className="px-5 py-4 text-center font-mono font-bold text-blue-600">
+                          {rev.totalMgrScore ? `${rev.totalMgrScore.toFixed(2)} ★` : rev.mgrScore ? `${rev.mgrScore} ★` : '---'}
+                        </td>
+                        <td className="px-5 py-4 text-center">
+                          {getRatingBadge(rev.finalRating || rev.autoRating)}
+                        </td>
+                        <td className="px-5 py-4 text-center">
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-sm text-[10px] font-bold ${
+                              rev.status === 'COMPLETED'
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                : 'bg-amber-50 text-amber-700 border border-amber-200'
+                            }`}
+                          >
+                            {rev.status === 'COMPLETED' ? 'Đã hoàn tất' : 'Chờ quản lý'}
+                          </span>
+                        </td>
+                        <td className="px-5 py-4 text-right">
+                          <button
+                            onClick={() => handleOpenEvaluationModal(rev)}
+                            className="px-3.5 py-1.5 rounded-sm bg-white hover:bg-slate-50 text-blue-600 hover:text-blue-700 border border-slate-200 font-semibold text-xs transition-all shadow-none"
+                          >
+                            {rev.status === 'COMPLETED' ? 'Xem & Chấm Lại' : 'Chấm Điểm Đối Chiếu'}
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>
@@ -1034,35 +1429,96 @@ export default function PerformancePage() {
       {/* TAB 4: TEMPLATES MANAGEMENT */}
       {activeTab === 'templates' && isHR && (
         <div className="space-y-6">
-          <div className="bg-white border border-slate-200 rounded-sm p-6 shadow-none">
-            <div className="flex items-center justify-between mb-4">
+          <div className="bg-white border border-slate-200 rounded-sm p-6 shadow-none space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                   <Sliders className="w-5 h-5 text-blue-600" />
-                  <span>Bộ Tiêu Chí Đánh Giá KPI Mẫu Đang Áp Dụng</span>
+                  <span>Hệ Thống Đa Khung Tiêu Chí KPI Phân Hóa ({templates.length} Bộ Tiêu Chí)</span>
                 </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Cấu trúc phân bổ 4 nhóm chỉ tiêu trọng tâm: Kết quả công việc (50%), Năng lực chuyên môn (20%), Năng lực hành vi (20%), Kỷ luật (10%).
+                <p className="text-xs text-slate-500 mt-1 max-w-2xl">
+                  Cơ chế chọn bộ tiêu chí thông minh: Hệ thống tự động gán khung KPI chuyên biệt căn cứ theo Cấp bậc (Cán bộ Quản lý vs Nhân viên) và Khối Chuyên môn (Kỹ thuật/AI, Sản phẩm & Vận hành), đồng thời chuẩn hóa quy đổi về thang điểm 5.00 cho Hội đồng BOD hiệu chỉnh (Bell-curve Calibration).
                 </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] text-slate-500 font-medium">Quy chuẩn:</span>
+                <span className="px-2.5 py-1 rounded-sm bg-blue-50 text-blue-700 font-bold text-xs border border-blue-200">
+                  Thang 5.00 Điểm Chuẩn Hóa
+                </span>
               </div>
             </div>
 
-            {selectedCycle?.template ? (
-              <div className="space-y-4">
-                <div className="p-4 rounded-sm bg-blue-50/60 border border-blue-200/80 flex items-center justify-between">
-                  <div>
-                    <span className="font-bold text-slate-900 text-sm">{selectedCycle.template.name}</span>
-                    <p className="text-xs text-slate-600 mt-0.5">{selectedCycle.template.description}</p>
+            {/* Template Navigation Pills */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {templates.map((tpl) => {
+                const isSelected = currentViewTemplate?.id === tpl.id;
+                return (
+                  <button
+                    key={tpl.id}
+                    type="button"
+                    onClick={() => setSelectedTemplateViewId(tpl.id)}
+                    className={`text-left p-4 rounded-sm border transition-all space-y-2 flex flex-col justify-between ${
+                      isSelected
+                        ? 'bg-blue-50/70 border-blue-500 ring-1 ring-blue-500 shadow-none'
+                        : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/70'
+                    }`}
+                  >
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        {getTemplateBadge(tpl)}
+                        {tpl.isDefault && (
+                          <span className="text-[10px] font-bold text-emerald-600 uppercase">Mặc định</span>
+                        )}
+                      </div>
+                      <h4 className="font-bold text-xs text-slate-900 line-clamp-2">
+                        {tpl.name}
+                      </h4>
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+                      <span>{tpl.categories?.length || 4} nhóm năng lực</span>
+                      <span className="font-bold font-mono text-blue-600">100%</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Detailed View of Selected Template */}
+            {currentViewTemplate && (
+              <div className="border border-slate-200 rounded-sm overflow-hidden space-y-4 p-5 bg-slate-50/40">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-sm bg-white border border-slate-200">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-bold text-base text-slate-900">{currentViewTemplate.name}</h4>
+                      {getTemplateBadge(currentViewTemplate)}
+                    </div>
+                    <p className="text-xs text-slate-600 max-w-2xl">{currentViewTemplate.description}</p>
+                    <div className="text-[11px] text-slate-500 pt-1 flex items-center gap-2">
+                      <span className="font-semibold text-slate-700">Đối tượng áp dụng:</span>
+                      <span className="text-blue-700 font-medium">{getTargetAudienceText(currentViewTemplate)}</span>
+                    </div>
                   </div>
-                  <span className="px-3 py-1 rounded-sm bg-blue-600 text-white font-bold text-xs">
-                    Mặc Định Chuẩn 2026
-                  </span>
+
+                  <div className="flex items-center gap-3 shrink-0">
+                    <div className="text-right">
+                      <span className="text-[10px] text-slate-400 block uppercase font-bold">Tổng Trọng Số</span>
+                      <span className="text-xl font-extrabold text-blue-700 font-mono">100%</span>
+                    </div>
+                    <div className="h-8 w-px bg-slate-200" />
+                    <div className="text-right">
+                      <span className="text-[10px] text-slate-400 block uppercase font-bold">Thang Đánh Giá</span>
+                      <span className="text-xl font-extrabold text-amber-600 font-mono">5.00 ★</span>
+                    </div>
+                  </div>
                 </div>
 
+                {/* Categories & Criteria Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {selectedCycle.template.categories.map((cat, idx) => (
-                    <div key={cat.id} className="bg-slate-50/70 border border-slate-200 rounded-sm p-4 space-y-3">
-                      <div className="flex items-center justify-between">
+                  {currentViewTemplate.categories.map((cat, idx) => (
+                    <div key={cat.id} className="bg-white border border-slate-200 rounded-sm p-4 space-y-3">
+                      <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
                         <div className="flex items-center gap-2">
                           <span className="w-6 h-6 rounded-sm bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center">
                             {idx + 1}
@@ -1078,22 +1534,26 @@ export default function PerformancePage() {
                         {cat.criteria.map((cri) => (
                           <div
                             key={cri.id}
-                            className="bg-white p-2.5 rounded-sm border border-slate-200/80 text-xs flex items-center justify-between"
+                            className="bg-slate-50/70 p-3 rounded-sm border border-slate-200/80 text-xs space-y-1"
                           >
-                            <span className="text-slate-800 font-medium">{cri.name}</span>
-                            <span className="text-[10px] text-slate-500 font-mono font-semibold">
-                              {(cri.weight * 100).toFixed(0)}%
-                            </span>
+                            <div className="flex items-center justify-between">
+                              <span className="text-slate-800 font-bold">{cri.name}</span>
+                              <span className="text-[10px] text-blue-700 font-mono font-bold bg-blue-50 px-1.5 py-0.5 rounded-sm border border-blue-200/60">
+                                {(cri.weight * 100).toFixed(0)}% trong nhóm
+                              </span>
+                            </div>
+                            {cri.description && (
+                              <p className="text-[11px] text-slate-500 flex items-start gap-1">
+                                <Info className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5" />
+                                <span>{cri.description}</span>
+                              </p>
+                            )}
                           </div>
                         ))}
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
-            ) : (
-              <div className="text-center py-8 text-slate-400 text-xs">
-                Chưa có bộ tiêu chí nào được gán cho kỳ đánh giá này.
               </div>
             )}
           </div>
@@ -1107,6 +1567,38 @@ export default function PerformancePage() {
         title={`Chấm Điểm KPI Đối Chiếu 2 Cột - ${evaluatingReview?.employee?.fullName} (${evaluatingReview?.employee?.employeeCode})`}
       >
         <form onSubmit={handleSubmitManagerReview} className="space-y-5 text-xs max-h-[80vh] overflow-y-auto pr-1">
+          {/* Employee & Template info banner */}
+          <div className="p-3.5 rounded-sm bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-slate-900">
+                  {evaluatingReview?.employee?.fullName}
+                </span>
+                <span className="text-[11px] font-mono text-blue-600 font-semibold">
+                  ({evaluatingReview?.employee?.employeeCode})
+                </span>
+                {evaluatingReview?.employee?.isCadre && (
+                  <span className="px-2 py-0.5 rounded-sm text-[10px] font-bold bg-purple-100 text-purple-700 border border-purple-200">
+                    {evaluatingReview.employee.cadreType || 'Cán Bộ Quản Lý'}
+                  </span>
+                )}
+              </div>
+              <div className="text-[11px] text-slate-500 mt-0.5">
+                {evaluatingReview?.employee?.position} &bull; {evaluatingReview?.employee?.department}
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:items-end gap-1">
+              <span className="text-[10px] uppercase font-bold text-slate-400">Bộ tiêu chí áp dụng:</span>
+              <div className="flex items-center gap-1.5">
+                {getTemplateBadge(evaluatingTemplate)}
+                <span className="font-semibold text-slate-800 text-xs">
+                  {evaluatingTemplate?.name}
+                </span>
+              </div>
+            </div>
+          </div>
+
           {/* Employee general note banner */}
           <div className="p-3.5 rounded-sm bg-amber-50/80 border border-amber-200 space-y-1">
             <span className="text-[11px] font-bold text-amber-900 uppercase">
@@ -1119,7 +1611,7 @@ export default function PerformancePage() {
 
           {/* Criteria comparisons */}
           <div className="space-y-4">
-            {selectedCycle?.template?.categories.map((cat) => (
+            {(evaluatingTemplate?.categories || []).map((cat, catIdx) => (
               <div key={cat.id} className="border border-slate-200 rounded-sm overflow-hidden">
                 <div className="bg-slate-100/80 px-4 py-2 flex items-center justify-between font-bold text-slate-800 text-[11px]">
                   <span>{cat.name}</span>
@@ -1127,6 +1619,13 @@ export default function PerformancePage() {
                 </div>
 
                 <div className="divide-y divide-slate-100 p-2 space-y-2">
+                  {isDisciplineCategory(cat.name, catIdx) && evaluatingReview?.autoMetrics && (
+                    <AttendanceDisciplineAuditBanner
+                      autoMetrics={evaluatingReview.autoMetrics}
+                      onApply={() => handleApplyAutoMetricsForManager(cat)}
+                      title={`Dữ Liệu Đối Soát Chuyên Cần & Kỷ Luật Của ${evaluatingReview.employee?.fullName || 'Nhân Sự'}`}
+                    />
+                  )}
                   {cat.criteria.map((cri) => {
                     const selfItem = evaluatingReview?.scores?.find((s) => s.criteriaId === cri.id);
                     const curMgrScore = mgrCriteriaScores[cri.id]?.score ?? 5;

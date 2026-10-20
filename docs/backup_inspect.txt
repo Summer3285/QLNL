@@ -1,0 +1,242 @@
+Doc: docs/MoTa_HeThong_QLNL_NexNova_backup_20261013.docx
+Paragraphs: 191, Tables: 7
+
+=== PARAGRAPHS ===
+[4] (Normal): CÔNG TY CỔ PHẦN CÔNG NGHỆ NEXNOVA
+[5] (Normal): NexNova Technologies Joint Stock Company
+[7] (Normal): MÔ TẢ HỆ THỐNG QUẢN LÝ NHÂN LỰC
+[8] (Normal): Enterprise Human Resource Management System (HRM)
+[12] (Normal): Đơn vị triển khai:  Công ty Cổ phần Công nghệ NexNova
+[13] (Normal): Người soạn thảo:  Phòng Tổ chức Nhân sự & Phòng Công nghệ Thông tin
+[15] (Heading 1): MỤC LỤC
+[16] (Normal): Phần I. Giới thiệu tổng quan về Công ty NexNova Technologies
+[17] (Normal): 1.1. Thông tin chung về doanh nghiệp
+[18] (Normal): 1.2. Tầm nhìn, Sứ mệnh & Giá trị cốt lõi
+[19] (Normal): 1.3. Cơ cấu tổ chức bộ máy doanh nghiệp
+[20] (Normal): Phần II. Mô hình hoạt động quản lý nguồn nhân lực
+[21] (Normal): 2.1. Mô hình quản trị nhân sự tổng thể
+[22] (Normal): 2.2. Quy trình nghiệp vụ cốt lõi
+[23] (Normal): 2.3. Hệ thống phân quyền (RBAC)
+[24] (Normal): Phần III. Các phân hệ quản lý nguồn nhân lực
+[25] (Normal): 3.1. Phân hệ Hồ sơ Cán bộ & Tổ chức Nhân sự
+[26] (Normal): 3.2. Phân hệ Chấm công & Quản lý Nghỉ phép
+[27] (Normal): 3.3. Phân hệ Tiền lương & Phiếu lương Điện tử
+[28] (Normal): 3.4. Phân hệ Đánh giá Hiệu suất & KPIs (360 Review)
+[29] (Normal): 3.5. Phân hệ Khen thưởng & Kỷ luật
+[30] (Normal): 3.6. Phân hệ Điều chuyển & Bổ nhiệm Cán bộ
+[31] (Normal): 3.7. Phân hệ Tuyển dụng & Thử việc
+[32] (Normal): 3.8. Phân hệ Báo cáo Thống kê & Sơ yếu Lý lịch
+[33] (Normal): Phần IV. Kiến trúc kỹ thuật hệ thống
+[34] (Normal): 4.1. Sơ đồ kiến trúc tổng thể
+[35] (Normal): 4.2. Công nghệ & Nền tảng sử dụng
+[36] (Normal): 4.3. Mô hình cơ sở dữ liệu (ERD)
+[38] (Heading 1): PHẦN I. GIỚI THIỆU TỔNG QUAN VỀ CÔNG TY NEXNOVA TECHNOLOGIES
+[39] (Heading 2): 1.1. Thông tin chung về doanh nghiệp
+[41] (Heading 2): 1.2. Tầm nhìn, Sứ mệnh & Giá trị cốt lõi
+[42] (Normal): Tầm nhìn (Vision): Trở thành doanh nghiệp công nghệ hàng đầu Đông Nam Á trong lĩnh vực Trí tuệ nhân tạo ứng dụng và giải pháp chuyển đổi số toàn diện cho doanh nghiệp vừa và lớn trước năm 2030.
+[43] (Normal): Sứ mệnh (Mission): Kiến tạo các sản phẩm và nền tảng công nghệ thông minh, giúp doanh nghiệp Việt Nam tối ưu hóa vận hành, nâng cao năng lực cạnh tranh và phát triển bền vững trên thị trường quốc tế.
+[44] (Normal): Giá trị cốt lõi:
+[45] (List Bullet): Đổi mới sáng tạo (Innovation): Không ngừng nghiên cứu, phát triển công nghệ mới, ứng dụng AI và Machine Learning vào các giải pháp thực tiễn.
+[46] (List Bullet): Con người là trọng tâm (People First): Đầu tư phát triển nguồn nhân lực chất lượng cao, xây dựng môi trường làm việc chuyên nghiệp, công bằng và nhân văn.
+[47] (List Bullet): Chính trực & Minh bạch (Integrity): Mọi hoạt động điều hành, quản lý nhân sự và tài chính đều tuân thủ pháp luật và chuẩn mực đạo đức kinh doanh.
+[48] (List Bullet): Hiệu quả & Chuyên nghiệp (Excellence): Cam kết chất lượng sản phẩm và dịch vụ đạt tiêu chuẩn quốc tế.
+[49] (Heading 2): 1.3. Cơ cấu tổ chức bộ máy doanh nghiệp
+[50] (Normal): NexNova Technologies được tổ chức theo mô hình quản trị hiện đại, gồm Ban Giám đốc Điều hành và 06 phòng ban chức năng chính:
+[55] (Normal): Hình 1.1: Sơ đồ Cơ cấu Tổ chức Bộ máy NexNova Technologies
+[56] (Normal): PHẦN II. MÔ HÌNH HOẠT ĐỘNG QUẢN LÝ NGUỒN NHÂN LỰC
+[57] (Normal): 2.1. Mô hình quản trị nhân sự tổng thể (Integrated HRM)
+[58] (Normal): Hệ thống Quản trị Nguồn Nhân lực NexNova HRM được xây dựng dựa trên nguyên lý Quản trị Nhân sự Tích hợp (Integrated Human Resource Management). Nền tảng kết nối toàn diện vòng đời nhân sự (Employee Lifecycle) từ lúc tuyển dụng, hội nhập, làm việc, phát triển nghề nghiệp, đãi ngộ cho đến khi kết thúc hợp tác, tạo thành dòng chảy dữ liệu xuyên suốt giữa các nghiệp vụ:
+[59] (Normal): 1. Tiếp nhận & Quản lý Hồ sơ Cán bộ: Tạo lập mã định danh duy nhất (Employee Code) và hồ sơ số hóa toàn diện (nhân thân, học vấn, chức danh, thang bảng lương).
+[60] (Normal): 2. Quản lý Thời gian & Chấm công: Ghi nhận dữ liệu ra/vào ca theo thời gian thực qua Cổng Web hoặc Desktop App; tự động đối soát ca làm việc và tính toán quỹ công.
+[61] (Normal): 3. Quản lý Nghỉ phép Điện tử: Xử lý quy trình nộp đơn, cấp phê duyệt nhiều cấp (Trưởng phòng/HR), quản lý 4 loại quỹ phép và tự động đồng bộ ngày công thực tế.
+[62] (Normal): 4. Tiền lương & Phúc lợi (C&B): Tính toán lương theo công thức động: ngày công thực tế, phụ cấp, trích nộp BHXH bắt buộc 10.5%, thuế TNCN lũy tiến từng phần và xuất phiếu lương PDF chuẩn.
+[63] (Normal): 5. Đánh giá Hiệu suất (360 Performance Review): Thiết lập kỳ đánh giá định kỳ (Quý/Năm), kết hợp tự đánh giá và đánh giá của quản lý theo thang 1-5 sao, phân loại thành 4 mức hoàn thành nhiệm vụ.
+[64] (Normal): 6. Khen thưởng & Kỷ luật Lao động: Tuyên dương thành tích vượt bậc và xử lý sai phạm theo quy chuẩn lao động; tự động liên thông tiền thưởng/phạt vào kỳ lương gần nhất.
+[65] (Normal): 7. Điều chuyển & Bổ nhiệm Nhân sự: Lưu trữ lịch sử luân chuyển phòng ban, thăng tiến chức vụ, điều chỉnh mức lương và tự động cập nhật phân quyền theo chức danh mới.
+[66] (Normal): 8. Tuyển dụng & Đào tạo Thử việc: Quản lý chiến dịch tuyển chọn nhân tài, theo dõi phễu ứng viên (5 trạng thái), quản lý giai đoạn thử việc và ký hợp đồng chính thức.
+[67] (Normal): 9. Phân tích Dữ liệu & Báo cáo Nhân sự: Cung cấp bức tranh nhân sự đa chiều (cơ cấu giới tính, thâm niên, độ tuổi, học vấn), dự báo nhân sự nghỉ hưu/nâng lương và xuất lý lịch cán bộ mẫu 2C/TCTW.
+[68] (Normal): Cơ chế liên thông dữ liệu lõi: Mối quan hệ liên thông dữ liệu giữa các phân hệ được thiết kế theo cơ chế đồng bộ tự động khép kín:
+[69] (Normal): - Chấm công -> Tính lương: Dữ liệu Chấm công & Nghỉ phép được duyệt -> Tự động chốt số ngày công thực tế đưa vào bảng tính Tiền lương tháng.
+[70] (Normal): - Đánh giá hiệu suất -> Khen thưởng & Lương thưởng: Kết quả xếp loại Đánh giá hiệu suất định kỳ -> Là căn cứ tự động đề xuất Khen thưởng thi đua hoặc xem xét Điều chuyển / Nâng ngạch bậc lương.
+[71] (Normal): - Quyết định nhân sự -> Hồ sơ Cán bộ & Phân quyền: Quyết định Điều chuyển/Bổ nhiệm hoặc Khen thưởng/Kỷ luật -> Tự động cập nhật hồ sơ gốc của Cán bộ và điều chỉnh mức phụ cấp/lương cơ bản.
+[72] (Normal): - Tuyển dụng -> Tiếp nhận Cán bộ chính thức: Ứng viên hoàn thành thử việc -> Một nút nhấn chuyển đổi thành Cán bộ chính thức, tự sinh mã nhân viên và kích hoạt tài khoản hệ thống.
+[73] (Normal): 2.2. Ma trận Quy trình nghiệp vụ Nhân sự cốt lõi
+[74] (Normal): Hệ thống chuẩn hóa 6 quy trình nghiệp vụ trọng yếu của công tác quản trị nhân lực doanh nghiệp thành luồng thao tác tự động trên phần mềm:
+[76] (Normal): 2.3. Hệ thống Phân quyền Quản trị dựa trên Vai trò (RBAC)
+[77] (Normal): Hệ thống áp dụng mô hình phân quyền chặt chẽ Role-Based Access Control (RBAC), đảm bảo tính bảo mật, toàn vẹn dữ liệu và phân tách trách nhiệm rõ ràng theo đúng chuẩn mực quản trị doanh nghiệp:
+[79] (Normal): PHẦN III. CÁC PHÂN HỆ QUẢN LÝ NGUỒN NHÂN LỰC CHUYÊN SÂU
+[80] (Normal): 3.1. Phân hệ Hồ sơ Cán bộ & Tổ chức Nhân sự (Core HR)
+[81] (Normal): Phân hệ Hồ sơ Cán bộ đóng vai trò là 'trái tim' của hệ thống NexNova HRM, lưu trữ tập trung và số hóa 100% hồ sơ lý lịch trích ngang của toàn bộ người lao động trong doanh nghiệp, thay thế hoàn toàn phương pháp lưu trữ hồ sơ giấy truyền thống.
+[82] (Normal): a) Cấu trúc trường thông tin quản trị hồ sơ cán bộ:
+[83] (Normal): - Thông tin định danh: Mã số cán bộ (Employee Code): Định danh duy nhất toàn hệ thống, tự động sinh mã theo quy tắc phòng ban (VD: ENG001, AI002, HR003...).
+[84] (Normal): - Thông tin nhân thân & Liên lạc: Họ và tên khai sinh, Giới tính, Ngày tháng năm sinh, Số CMND/CCCD, Nơi cấp, Ngày cấp, Địa chỉ thường trú, Địa chỉ liên hệ hiện tại, Số điện thoại cá nhân, Email công việc, Ảnh đại diện chuẩn.
+[85] (Normal): - Vị trí việc làm & Tổ chức: Phòng ban trực thuộc (6 phòng ban chính), Chức vụ đảm nhiệm, Chức danh chuyên môn, Loại hình hợp đồng lao động (Chính thức, Thử việc, Hợp đồng xác định thời hạn), Ngày gia nhập công ty (Join Date), Thâm niên công tác.
+[86] (Normal): - Trình độ & Kỹ năng: Trình độ học vấn cao nhất (Đại học, Thạc sĩ, Tiến sĩ, Cao đẳng), Chuyên ngành đào tạo, Tên trường đào tạo, Các văn bằng/chứng chỉ chuyên môn quốc tế.
+[87] (Normal): - Thông tin Đãi ngộ & Tiền lương: Mức lương cơ bản (Base Salary), Phụ cấp chức vụ (Allowance), Hệ số lương, Mã số thuế cá nhân, Mã số sổ BHXH, Số tài khoản ngân hàng chi trả lương, Niên hạn xem xét điều chỉnh lương định kỳ.
+[88] (Normal): - Trạng thái lao động: Đang công tác (ACTIVE), Tạm hoãn hợp đồng (SUSPENDED), Đã nghỉ việc (RESIGNED/TERMINATED).
+[89] (Normal): b) Chức năng nghiệp vụ & Thao tác quản trị:
+[90] (Normal): - Nghiệp vụ CRUD toàn diện: Hỗ trợ đầy đủ các thao tác Tạo mới, Xem chi tiết, Chỉnh sửa thông tin và Vô hiệu hóa/Xóa hồ sơ cán bộ với quy trình xác thực chặt chẽ.
+[91] (Normal): - Bộ lọc & Tra cứu đa tiêu chí: Bộ lọc thông minh theo tên, mã cán bộ, phòng ban trực thuộc, trình độ học vấn, khoảng mức lương và tình trạng công tác với kết quả phản hồi tức thì dưới 100ms.
+[92] (Normal): - Trích xuất dữ liệu hàng loạt: Xuất danh sách nhân sự toàn công ty hoặc theo từng phòng ban dưới các định dạng Excel/PDF phục vụ công tác thanh tra, kiểm toán và báo cáo quản trị.
+[93] (Normal): 3.2. Phân hệ Chấm công & Quản lý Nghỉ phép (Time & Attendance Management)
+[94] (Normal): Phân hệ đảm nhiệm việc kiểm soát kỷ luật thời gian lao động, theo dõi giờ công thực tế và giải quyết quyền lợi nghỉ phép của người lao động một cách minh bạch, hạn chế tối đa sai sót và tranh chấp lao động.
+[95] (Normal): a) Nghiệp vụ Chấm công thời gian thực (Real-time Time Tracking):
+[96] (Normal): - Cơ chế Check-in/Check-out đa nền tảng: Cán bộ có thể điểm danh trực tiếp trên Cổng Web hoặc Desktop App; hệ thống tự động lưu trữ dấu thời gian (timestamp) chính xác từng giây qua giao thức NTP chuẩn.
+[97] (Normal): - Tự động đối soát ca làm việc: Giờ bắt đầu làm việc chuẩn là 08:30 sáng, giờ tan ca chuẩn là 17:30 chiều. Điểm danh sau 08:30 tự động gắn nhãn ĐI MUỘN (LATE); rời ca trước 17:30 tự động ghi nhận VỀ SỚM; không thực hiện check-in trong ngày tính là VẮNG MẶT (ABSENT).
+[98] (Normal): - Tính toán thời lượng công thực tế: Hệ thống tự động tính tổng số giờ công lao động trong ngày, hỗ trợ ghi nhận giờ làm thêm (OT) nếu được sự đồng ý của Quản lý.
+[99] (Normal): - Bảng công cá nhân trực quan: Hiển thị trực quan bảng lịch tháng của từng nhân viên với mã màu trực quan (Xanh lá: Đúng giờ, Vàng: Đi muộn, Đỏ: Vắng mặt, Xanh dương: Nghỉ phép có duyệt).
+[100] (Normal): b) Nghiệp vụ Quản lý Nghỉ phép Điện tử (Leave Management):
+[101] (Normal): - 04 Loại hình nghỉ phép chuẩn hóa: Hệ thống phân định rõ ràng 04 chế độ nghỉ: (1) Phép năm (Annual Leave - 12 ngày/năm theo Luật Lao động); (2) Nghỉ ốm đau có xác nhận y tế (Sick Leave); (3) Nghỉ chế độ Thai sản (Maternity Leave); (4) Nghỉ việc riêng không hưởng lương (Unpaid Leave).
+[102] (Normal): - Quy trình nộp đơn không giấy tờ: Cán bộ nộp đơn trực tuyến chọn loại phép, khoảng ngày bắt đầu - kết thúc, người bàn giao công việc và lý do chi tiết.
+[103] (Normal): - Luồng xét duyệt tập trung: HR Manager nhận thông báo tức thời, xem xét số ngày phép còn lại của nhân viên và thực hiện PHÊ DUYỆT (APPROVED) hoặc TỪ CHỐI (REJECTED) kèm ghi chú lý do.
+[104] (Normal): - Đồng bộ hóa ngày công tự động: Đơn nghỉ phép sau khi được duyệt sẽ tự động cập nhật vào bảng chấm công tổng hợp và trừ vào ngày công thực tế tính lương tương ứng.
+[105] (Normal): 3.3. Phân hệ Tiền lương & Phiếu lương Điện tử (Payroll & Electronic Payslip)
+[106] (Normal): Phân hệ Tiền lương của NexNova HRM thực hiện tự động hóa hoàn toàn bài toán tính lương phức tạp, tuân thủ nghiêm ngặt các quy định pháp luật Việt Nam hiện hành về Luật Lao động, Luật BHXH và Luật Thuế Thu nhập cá nhân (TNCN).
+[107] (Normal): a) Quy chuẩn & Công thức tính toán chi tiết:
+[108] (Normal): 1. Lương thời gian thực tế: Lương ngày = Lương cơ bản hợp đồng / 22 ngày công chuẩn; Lương thực nhận = Lương ngày × Số ngày công thực tế ghi nhận từ phân hệ Chấm công.
+[109] (Normal): 2. Các khoản phụ cấp đãi ngộ: Bao gồm Phụ cấp chức vụ (theo cấp bậc quản lý), Phụ cấp trách nhiệm công việc và Tiền thưởng hiệu suất đột xuất.
+[110] (Normal): 3. Khấu trừ BHXH bắt buộc: Tự động trích trừ 10.5% mức lương đóng bảo hiểm của người lao động (8% Quỹ Hưu trí - Tử tuất, 1.5% BHYT, 1% BHTN) theo đúng Nghị định của Chính phủ.
+[111] (Normal): 4. Thu nhập chịu thuế TNCN: Thu nhập chịu thuế = (Tổng thu nhập - Các khoản miễn thuế) - Mức giảm trừ gia cảnh bản thân (11.000.000 VNĐ) - Giảm trừ người phụ thuộc (4.400.000 VNĐ/người) - Các khoản trích nộp bảo hiểm.
+[112] (Normal): 5. Biểu thuế lũy tiến từng phần: Bậc 1 (đến 5 triệu: 5%); Bậc 2 (trên 5 - 10 triệu: 10%); Bậc 3 (trên 10 - 18 triệu: 15%); Bậc 4 (trên 18 - 32 triệu: 20%); Bậc 5 (trên 32 - 52 triệu: 25%); Bậc 6 (trên 52 - 80 triệu: 30%); Bậc 7 (trên 80 triệu: 35%).
+[113] (Normal): 6. Tiền lương thực lĩnh (NET): Lương thực lĩnh (Net) = Lương thời gian thực tế + Tổng phụ cấp - Trích nộp BHXH (10.5%) - Thuế TNCN lũy tiến - Các khoản khấu trừ kỷ luật (nếu có).
+[114] (Normal): b) Cơ chế Vận hành Bảng lương & Phát hành Phiếu lương:
+[115] (Normal): - Tính lương tự động hàng loạt: Chỉ với 1 thao tác nhấn chuột, hệ thống tính toán đồng loạt toàn bộ dữ liệu lương của hơn 50 nhân sự chỉ trong vòng chưa đầy 3 giây, loại trừ 100% sai số thủ công.
+[116] (Normal): - Xuất phiếu lương điện tử PDF: Mỗi cán bộ nhận được phiếu lương điện tử bảo mật tuyệt đối, hiển thị chi tiết minh bạch từng dòng thu nhập, số tiền bảo hiểm đóng và mức thuế bị trích nộp.
+[117] (Normal): - Kiểm soát vòng đời thanh toán: Quản lý dòng tiền chi trả qua các trạng thái: ĐANG CHỜ DUYỆT (PENDING) -> ĐÃ DUYỆT CHI TRẢ (APPROVED) -> ĐÃ THANH TOÁN QUA NGÂN HÀNG (PAID).
+[118] (Normal): 3.4. Phân hệ Đánh giá Hiệu suất & KPIs (360 Performance Appraisal)
+[119] (Normal): Phân hệ triển khai mô hình đánh giá 360 độ hiện đại, kết hợp giữa tinh thần tự giác của nhân viên và đánh giá khách quan của cấp quản lý, biến công tác đánh giá định kỳ thành động lực thúc đẩy phát triển năng lực cá nhân và tổ chức.
+[120] (Normal): a) Quy trình 3 bước đánh giá chuẩn:
+[121] (Normal): - Bước 1 - Thiết lập Kỳ đánh giá: Phòng Nhân sự khởi tạo đợt đánh giá định kỳ (VD: Kỳ đánh giá Quý I/2026, Đánh giá Tổng kết Năm 2026), thiết lập khoảng thời gian mở cổng và đối tượng tham gia.
+[122] (Normal): - Bước 2 - Nhân viên Tự đánh giá (Self-Review): Từng nhân viên truy cập hệ thống, tự chấm điểm hiệu quả công việc trên thang đo 1 - 5 sao, đồng thời viết báo cáo tóm tắt các dự án đã hoàn thành, sáng kiến cải tiến và mục tiêu tiếp theo.
+[123] (Normal): - Bước 3 - Quản lý Đánh giá chéo & Xếp loại: Trưởng bộ phận và HR Manager tiến hành thẩm định báo cáo, chấm điểm độc lập (1 - 5 sao), ghi nhận nhận xét chi tiết về ưu điểm, hạn chế cần khắc phục và định hướng phát triển.
+[125] (Normal): b) Khung Xếp loại & Ứng dụng kết quả đánh giá:
+[132] (Normal): 3.5. Phân hệ Khen thưởng & Kỷ luật Lao động (Rewards & Discipline)
+[133] (Normal): Đảm bảo tính nghiêm minh trong quản trị nội bộ và xây dựng văn hóa ghi nhận thành tích xứng đáng. Phân hệ hỗ trợ lập và lưu trữ các văn bản pháp quy nội bộ có giá trị ràng buộc trực tiếp với quyền lợi của người lao động.
+[134] (Normal): a) Nghiệp vụ Khen thưởng Thi đua:
+[135] (Normal): - Văn bản hóa quyết định: Mã số quyết định (VD: KT-2026-001), Ngày ban hành, Cán bộ/Tập thể thụ hưởng, Căn cứ pháp lý thành tích, Lý do khen thưởng chi tiết.
+[136] (Normal): - Đa dạng danh hiệu thi đua: Bằng khen Ban Giám đốc, Giấy khen cấp phòng ban, Thưởng nóng dự án thành công, Danh hiệu Chiến sĩ thi đua cấp cơ sở.
+[137] (Normal): - Tích hợp đãi ngộ tài chính: Hệ thống tự động cộng mức tiền thưởng được duyệt trực tiếp vào kỳ lương của tháng ban hành quyết định.
+[138] (Normal): b) Nghiệp vụ Chế tài Kỷ luật:
+[139] (Normal): - 4 Cấp độ chế tài chuẩn: Khiển trách bằng văn bản -> Kéo dài thời hạn nâng lương (không quá 6 tháng) -> Cách chức/Hạ bậc lương -> Buộc thôi việc (Sa thải theo điều 125 Bộ luật Lao động).
+[140] (Normal): - Quản lý hiệu lực quyết định: Ghi nhận đầy đủ số quyết định, cán bộ vi phạm, mức phạt bồi thường tài chính (nếu có), ngày ban hành và ngày hết hiệu lực chế tài.
+[141] (Normal): - Đồng bộ hồ sơ & Trừ lương: Quyết định kỷ luật được lưu vào hồ sơ gốc phục vụ việc xét duyệt thăng tiến trong tương lai; tiền bồi thường/phạt tự động trừ vào bảng lương Net.
+[142] (Normal): 3.6. Phân hệ Điều chuyển & Bổ nhiệm Cán bộ (Staff Mobility & Promotion)
+[143] (Normal): Quản lý dòng luân chuyển nhân sự nội bộ, bổ nhiệm cán bộ quản lý và tái cơ cấu phòng ban nhằm đáp ứng chiến lược mở rộng kinh doanh không ngừng của NexNova Technologies.
+[144] (Normal): a) Dữ liệu theo dõi Điều chuyển & Bổ nhiệm:
+[145] (Normal): - Căn cứ pháp lý: Mã số quyết định (VD: QD-DC-2026-05), Ngày ký duyệt, Ngày bắt đầu có hiệu lực thi hành.
+[146] (Normal): - Thông tin thay đổi vị trí: Lưu trữ đối soát song song: Phòng ban cũ -> Phòng ban mới; Chức vụ cũ -> Chức vụ mới được bổ nhiệm.
+[147] (Normal): - Điều chỉnh thang bảng lương: Ghi nhận mức lương cũ -> Mức lương cơ bản mới cùng các phụ cấp chức vụ tương ứng với cương vị mới.
+[148] (Normal): b) Cơ chế Tự động hóa Hồ sơ & Kế thừa Dữ liệu:
+[149] (Normal): - Tự động cập nhật hồ sơ gốc: Ngay khi quyết định điều chuyển được HR Manager phê duyệt, hệ thống tự động ghi đè thông tin phòng ban, chức vụ, mức lương mới vào hồ sơ cán bộ mà không cần can thiệp thủ công.
+[150] (Normal): - Tự động điều chỉnh ma trận phân quyền: Cán bộ được bổ nhiệm chức vụ quản lý (VD: Trưởng phòng) sẽ được hệ thống tự động kích hoạt quyền duyệt đơn nghỉ phép của các nhân viên thuộc phòng ban phụ trách.
+[151] (Normal): - Lịch sử công tác bất biến (Audit Trail): Lưu trữ vĩnh viễn toàn bộ tiến trình công tác của từng cán bộ từ ngày đầu vào công ty đến hiện tại, phục vụ việc đánh giá sự cống hiến và quy hoạch cán bộ nguồn.
+[152] (Normal): 3.7. Phân hệ Tuyển dụng & Quản lý Thử việc (Recruitment & Onboarding)
+[153] (Normal): Tối ưu hóa chi phí và thời gian chiêu mộ nhân tài, số hóa toàn bộ phễu tuyển dụng từ khâu tiếp nhận nhu cầu nhân sự đến khi kết thúc thời gian thử việc thành công.
+[154] (Normal): a) Quản lý Kế hoạch Tuyển dụng (Recruitment Campaigns):
+[155] (Normal): - Lập chiến dịch tuyển dụng: Khởi tạo chiến dịch gắn liền với từng phòng ban (VD: Tuyển dụng Kỹ sư AI Quý 2/2026, Tuyển dụng Frontend Senior...).
+[156] (Normal): - Thiết lập tiêu chuẩn ứng viên: Xác định rõ số lượng chỉ tiêu cần tuyển, mô tả công việc (JD), yêu cầu kinh nghiệm, bằng cấp và dải mức lương dự kiến.
+[157] (Normal): - Vòng đời chiến dịch: MỞ (OPEN) -> ĐANG TRIỂN KHAI (IN_PROGRESS) -> ĐÃ HOÀN THÀNH ĐỦ CHỈ TIÊU (CLOSED).
+[158] (Normal): b) Theo dõi Phễu Ứng viên & Quy trình Thử việc (Candidate Pipeline):
+[159] (Normal): - Phễu ứng viên 5 giai đoạn: Ứng viên được phân loại và quản lý qua 5 nấc trạng thái rõ ràng: (1) ĐÃ NỘP HỒ SƠ (APPLIED) -> (2) ĐANG PHỎNG VẤN (INTERVIEWING) -> (3) ĐÃ GỬI OFFER LƯƠNG (OFFERED) -> (4) ĐANG THỬ VIỆC (PROBATION) -> (5) TỪ CHỐI / KHÔNG ĐẠT (REJECTED).
+[160] (Normal): - Giám sát thời gian thử việc: Thiết lập thời gian thử việc chuẩn (1 - 2 tháng theo Luật Lao động), ghi nhận người hướng dẫn (mentor) và đánh giá định kỳ sau 30 ngày.
+[161] (Normal): - Chuyển đổi Cán bộ chính thức trong 1-click: Khi ứng viên hoàn thành giai đoạn thử việc đạt yêu cầu, quản lý chỉ cần nhấn 'Ký hợp đồng chính thức' - hệ thống sẽ tự động tạo một Hồ sơ Cán bộ mới trong Phân hệ Hồ sơ Cán bộ, cấp mã số nhân viên và kích hoạt tài khoản truy cập hệ thống ngay lập tức.
+[162] (Normal): 3.8. Phân hệ Báo cáo Thống kê & Xuất Sơ yếu Lý lịch 2C (HR Analytics & Compliance)
+[163] (Normal): Cung cấp công cụ phân tích dữ liệu nhân sự mạnh mẽ cho Ban Giám đốc và bộ phận nhân sự, biến dữ liệu thô thành thông tin giá trị hỗ trợ việc ra quyết định chiến lược nguồn nhân lực.
+[164] (Normal): a) Báo cáo Phân tích Nhân khẩu học & Quỹ lương:
+[165] (Normal): - Báo cáo cơ cấu nhân sự: Biểu đồ phân bổ nhân sự theo 6 phòng ban, cơ cấu tỷ lệ Nam/Nữ và tháp độ tuổi lao động của doanh nghiệp.
+[166] (Normal): - Báo cáo trình độ chuyên môn: Thống kê tỷ lệ nhân sự có trình độ Sau Đại học (Tiến sĩ, Thạc sĩ), Đại học và các chứng chỉ công nghệ quốc tế chuyên sâu.
+[167] (Normal): - Báo cáo quỹ lương doanh nghiệp: Phân tích biến động chi phí tiền lương, chi phí đóng bảo hiểm xã hội và thuế TNCN qua các quý, hỗ trợ lập dự toán ngân sách nhân sự.
+[168] (Normal): b) Hệ thống Cảnh báo Thông minh & Quản trị Rủi ro:
+[169] (Normal): - Cảnh báo hạn tăng lương định kỳ: Tự động rà soát và đưa ra danh sách các cán bộ đã công tác đủ 12 hoặc 24 tháng kể từ lần nâng lương gần nhất để Hội đồng lương xem xét.
+[170] (Normal): - Cảnh báo tuổi nghỉ hưu: Tự động thông báo các cán bộ chuẩn bị bước sang tuổi nghỉ hưu theo lộ trình tăng tuổi nghỉ hưu của Bộ luật Lao động (Nam đủ 62 tuổi, Nữ đủ 60 tuổi) để chủ động quy hoạch nhân sự kế cận.
+[171] (Normal): - Cảnh báo đáo hạn hợp đồng: Cảnh báo trước 30 ngày các hợp đồng lao động xác định thời hạn hoặc hợp đồng thử việc sắp đáo hạn.
+[172] (Normal): c) Xuất bản Sơ yếu Lý lịch Cán bộ Chuẩn Mẫu 2C/TCTW:
+[173] (Normal): Hệ thống tích hợp module kết xuất hồ sơ theo Mẫu 2C/TCTW chuẩn của Ban Tổ chức Trung ương và Bộ Nội vụ, phục vụ công tác thanh tra công vụ, bổ nhiệm chức danh và thẩm tra lý lịch:
+[174] (Normal): - Tự động điền 26 mục thông tin: Tự động điền đầy đủ 26 mục thông tin chuẩn: Họ tên, Tên gọi khác, Ngày sinh, Quê quán, Nơi ở hiện nay, Dân tộc, Tôn giáo, Trình độ văn hóa, Trình độ chuyên môn, Trình độ lý luận chính trị, Quá trình tham gia công tác...
+[175] (Normal): - Tích hợp dữ liệu công tác xuyên suốt: Trích xuất bảng lịch sử công tác từ phân hệ Điều chuyển/Bổ nhiệm và bảng thành tích từ phân hệ Khen thưởng/Kỷ luật.
+[176] (Heading 1): - Xuất file PDF/Word độ nét cao: Kết xuất trực tiếp ra file tài liệu PDF hoặc Word chuẩn khổ giấy A4, có khung viền tiêu chuẩn, vị trí dán ảnh thẻ 4x6 và dòng ký duyệt của Thủ trưởng đơn vị.
+[177] (Heading 1): PHẦN IV. KIẾN TRÚC KỸ THUẬT HỆ THỐNG
+[178] (Heading 2): 4.1. Sơ đồ kiến trúc tổng thể
+[179] (Normal): Hệ thống NexNova HRM được xây dựng theo kiến trúc Client – Server 3 tầng (3-Tier Architecture), tách biệt hoàn toàn giữa Giao diện người dùng (Presentation Layer), Tầng nghiệp vụ (Business Logic Layer) và Tầng dữ liệu (Data Access Layer).
+[181] (Normal): Hình 4.1: Sơ đồ Kiến trúc Kỹ thuật Hệ thống 3 Tầng NexNova HRM
+[183] (Heading 2): 4.2. Công nghệ & Nền tảng sử dụng
+[185] (Heading 2): 4.3. Mô hình Cơ sở Dữ liệu (ERD – Entity Relationship Diagram)
+[186] (Normal): Cơ sở dữ liệu NexNova HRM gồm 12 bảng dữ liệu chính, liên kết chặt chẽ qua khóa ngoại:
+[189] (Normal): - HẾT -
+[190] (Normal): Tài liệu được lập bởi Phòng Tổ chức Nhân sự & Phòng Công nghệ Thông tin
+Công ty Cổ phần Công nghệ NexNova – Tháng 9/2026
+
+=== TABLES ===
+
+--- TABLE 0 (12 rows, 2 cols) ---
+  Row 0: Tiêu chí | Thông tin chi tiết
+  Row 1: Tiêu chí | Thông tin chi tiết
+  Row 2: Tên đầy đủ | Công ty Cổ phần Công nghệ NexNova (NexNova Technologies JSC)
+  Row 3: Mã số thuế | 0109876543
+  Row 4: Năm thành lập | 2020
+  Row 5: Trụ sở chính | Tầng 18, Tòa nhà NexNova Tower, Phạm Văn Đồng, Cầu Giấy, Hà Nội
+  Row 6: Văn phòng phía Nam | Khu Đô thị Sala, Thảo Điền, TP. Thủ Đức, TP. Hồ Chí Minh
+  Row 7: Lĩnh vực | Công nghệ thông tin, Trí tuệ nhân tạo, Giải pháp chuyển đổi số doanh nghiệp
+  Row 8: Quy mô nhân sự | Trên 50 cán bộ, kỹ sư & chuyên viên chính thức
+  Row 9: Website | https://nexnova.tech
+  Row 10: Email liên hệ | contact@nexnova.tech
+  Row 11: Đại diện pháp luật | Ông Trần Quang Huy – Giám đốc Điều hành (CEO)
+
+--- TABLE 1 (7 rows, 4 cols) ---
+  Row 0: STT | Phòng ban / Bộ phận | Chức năng chính | Trưởng phòng
+  Row 1: 1 | Phòng Kỹ thuật Phần mềm (Software Engineering) | Nghiên cứu, phát triển sản phẩm phần mềm, ứng dụng web/mobile & hạ tầng kỹ thuật | Ông Trần Quang Huy (Kiêm nhiệm CEO)
+  Row 2: 2 | Phòng AI & Dữ liệu (AI & Data Intelligence) | Nghiên cứu trí tuệ nhân tạo, xử lý dữ liệu lớn, phát triển mô hình Machine Learning | TS. Đặng Minh Tuấn
+  Row 3: 3 | Phòng Tổ chức Nhân sự (People & Culture) | Quản trị nguồn nhân lực, tuyển dụng, đào tạo, chế độ chính sách, thi đua khen thưởng | ThS. Nguyễn Thu Hà
+  Row 4: 4 | Phòng Sản phẩm & Thiết kế (Product & Design) | Quản lý sản phẩm, thiết kế UX/UI, phân tích thị trường & định hướng sản phẩm | Bà Phạm Mai Lan
+  Row 5: 5 | Phòng Tài chính & Vận hành (Finance & Operations) | Kế toán tài chính, tiền lương, ngân sách, quản lý tài sản & vận hành hành chính | ThS. Hoàng Quốc Bảo
+  Row 6: 6 | Ban Cố vấn Chiến lược (Strategic Advisory Board) | Tham mưu chiến lược phát triển dài hạn, công nghệ lõi & quản trị rủi ro | TS. Bùi Đức Trọng
+
+--- TABLE 2 (7 rows, 5 cols) ---
+  Row 0: Quy trình | Đầu vào (Input) | Các bước thực hiện | Cơ quan/Cấp xử lý | Kết quả đầu ra (Output)
+  Row 1: Tuyển dụng & Tiếp nhận | Yêu cầu tuyển dụng từ các phòng ban | Lập chiến dịch tuyển dụng -> Thu nhận hồ sơ -> Sàng lọc & Phỏng vấn -> Chào lương (Offer) -> Thử việc -> Tiếp nhận chính thức | Trưởng bộ phận & HR Manager | Hồ sơ ứng viên trúng tuyển, Mã cán bộ mới, Hợp đồng lao động
+  Row 2: Theo dõi Ngày công & Giờ làm việc | Dữ liệu check-in/out qua Web hoặc Desktop Client | Ghi nhận timestamp -> Đối soát giờ chuẩn -> Phân loại đúng giờ/muộn/vắng -> Tổng hợp ngày công lũy kế trong tháng | Cán bộ tự điểm danh; HR giám sát | Bảng chấm công tổng hợp tháng, tỷ lệ chuyên cần
+  Row 3: Xét duyệt Nghỉ phép điện tử | Đơn xin nghỉ phép trực tuyến từ nhân viên | Cán bộ nộp đơn chọn ngày, loại phép, lý do -> Hệ thống kiểm tra số dư phép -> Quản lý/HR xét duyệt -> Cập nhật bảng công | HR Manager phê duyệt | Đơn phê duyệt/từ chối, Cập nhật trừ ngày công tính lương
+  Row 4: Tính lương & Trả phiếu lương | Bảng chấm công chốt, Mức lương cơ bản, Phụ cấp, Khen thưởng/Kỷ luật | Kích hoạt tính lương tự động -> Tính lương theo công công tác -> Cộng phụ cấp & thưởng -> Khấu trừ BHXH 10.5% & Thuế TNCN -> Xuất bảng lương & Phiếu lương | Chuyên viên C&B, Kế toán & CEO duyệt | Bảng thanh toán lương Net, Phiếu lương PDF gửi từng cán bộ
+  Row 5: Đánh giá Hiệu suất 360 | Kế hoạch định kỳ quý/năm, Chỉ tiêu KPIs công việc | HR mở kỳ đánh giá -> Cán bộ tự chấm điểm & báo cáo thành tích -> Quản lý trực tiếp chấm điểm & nhận xét -> Xếp loại tổng hợp | Toàn thể nhân sự & Quản lý phòng ban | Báo cáo xếp loại 4 mức, Làm căn cứ xét thưởng và thăng chức
+  Row 6: Khen thưởng, Kỷ luật & Điều chuyển | Đề xuất thi đua hoặc Biên bản vi phạm nội quy | Lập dự thảo quyết định -> Trình phê duyệt -> Ban hành quyết định số -> Tự động cập nhật hồ sơ & khấu trừ/thưởng vào lương | Ban Giám đốc & Phòng Tổ chức Nhân sự | Quyết định hành chính số hóa, Hồ sơ lịch sử cán bộ cập nhật
+
+--- TABLE 3 (4 rows, 4 cols) ---
+  Row 0: Vai trò (Role) | Đối tượng người dùng | Quyền hạn chi tiết trên hệ thống | Phạm vi truy cập dữ liệu
+  Row 1: ADMIN | Ban Giám đốc, Giám đốc CNTT, Quản trị viên hệ thống | Toàn quyền quản trị hệ thống: Quản lý tài khoản đăng nhập, cấu hình tham số lương/thuế/bảo hiểm, phân quyền người dùng, giám sát nhật ký truy cập (audit logs), sao lưu và phục hồi dữ liệu. | Toàn bộ dữ liệu doanh nghiệp
+  Row 2: HR_MANAGER | Trưởng phòng Nhân sự, Chuyên viên C&B, Tuyển dụng | Toàn quyền tác nghiệp chuyên môn: Thêm/sửa/xóa hồ sơ nhân sự, phê duyệt đơn nghỉ phép, thực hiện tính toán lương, phát hành phiếu lương, thiết lập kỳ đánh giá KPIs, ban hành quyết định khen thưởng/kỷ luật/điều chuyển, quản lý ứng viên và xuất báo cáo thống kê, sơ yếu lý lịch 2C. | Toàn bộ dữ liệu nhân sự & bảng lương công ty
+  Row 3: EMPLOYEE | Toàn thể cán bộ, nhân viên, kỹ sư chính thức | Quyền tự phục vụ (Self-service): Quản lý thông tin hồ sơ cá nhân, thực hiện điểm danh vào/ra ca hàng ngày, xem lịch sử chấm công, gửi đơn xin nghỉ phép trực tuyến, tự chấm điểm đánh giá hiệu suất, tra cứu và tải phiếu lương điện tử (Payslip) hàng tháng. | Chỉ truy cập thông tin cá nhân của chính mình
+
+--- TABLE 4 (5 rows, 4 cols) ---
+  Row 0: Xếp loại | Điểm số chuẩn | Mô tả tiêu chuẩn năng lực | Chính sách đãi ngộ áp dụng
+  Row 1: Xuất sắc | 4.8 – 5.0 Sao | Hoàn thành vượt mức 120% KPIs, có sáng kiến công nghệ nổi bật mang lại giá trị lớn cho doanh nghiệp. | Ưu tiên xét thưởng nóng, thăng tiến chức vụ và đề xuất nâng lương vượt niên hạn.
+  Row 2: Tốt | 4.0 – 4.7 Sao | Hoàn thành tốt 100% mục tiêu công việc, có tinh thần kỷ luật cao và đóng góp tích cực cho tập thể. | Hưởng trọn vẹn lương thưởng hiệu suất tháng/quý và bình xét danh hiệu thi đua.
+  Row 3: Đạt yêu cầu | 3.0 – 3.9 Sao | Hoàn thành cơ bản các nhiệm vụ được giao (80 - 95%), đáp ứng chuẩn kỹ thuật tối thiểu của vị trí. | Hưởng chế độ đãi ngộ thông thường, lập kế hoạch kèm cặp nâng cao kỹ năng.
+  Row 4: Cần cải thiện | Dưới 3.0 Sao | Không đạt chỉ tiêu công việc, thường xuyên trễ deadline hoặc vi phạm quy trình kỹ thuật. | Đưa vào danh sách giám sát đặc biệt, chuyển đổi vị trí công việc hoặc xem xét chấm dứt thử việc/hợp đồng.
+
+--- TABLE 5 (11 rows, 3 cols) ---
+  Row 0: Thành phần | Công nghệ | Ghi chú
+  Row 1: Frontend Web | Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS | Single Page Application, Server-side Rendering
+  Row 2: Frontend Desktop | Electron 28+, Auto-update, System Tray | Cross-platform (Windows/macOS/Linux)
+  Row 3: Backend API | Node.js 20 LTS, Express.js, TypeScript | RESTful API, Modular Controllers
+  Row 4: Database ORM | Prisma ORM v5 | Type-safe database access, migrations
+  Row 5: Cơ sở dữ liệu | PostgreSQL / SQLite | 12 bảng dữ liệu chính
+  Row 6: Xác thực | JWT (JSON Web Tokens), bcryptjs | Token-based authentication
+  Row 7: Phân quyền | RBAC Middleware tự xây dựng | 3 roles: ADMIN, HR_MANAGER, EMPLOYEE
+  Row 8: Xuất PDF | PDFKit, Phiếu lương & Sơ yếu Lý lịch 2C | Mẫu chuẩn quy định
+  Row 9: Containerization | Docker, Docker Compose | Triển khai toàn bộ stack cục bộ
+  Row 10: Icons & UI Kit | Lucide React Icons | Bộ icon vector nhẹ, nhất quán
+
+--- TABLE 6 (13 rows, 3 cols) ---
+  Row 0: STT | Tên bảng (Table) | Mô tả chức năng
+  Row 1: 1 | users | Tài khoản đăng nhập hệ thống (email, mật khẩu, vai trò)
+  Row 2: 2 | employee_profiles | Hồ sơ nhân sự chi tiết (thông tin cá nhân, phòng ban, lương)
+  Row 3: 3 | attendances | Bản ghi chấm công hàng ngày (giờ vào/ra, trạng thái)
+  Row 4: 4 | leave_requests | Đơn xin nghỉ phép (loại phép, thời gian, trạng thái duyệt)
+  Row 5: 5 | payrolls | Bảng lương tháng (thu nhập, khấu trừ, lương Net, trạng thái chi trả)
+  Row 6: 6 | performance_cycles | Kỳ đánh giá hiệu suất (tên kỳ, thời gian)
+  Row 7: 7 | performance_reviews | Bản đánh giá 360 (điểm tự chấm, điểm quản lý, xếp loại)
+  Row 8: 8 | rewards | Quyết định khen thưởng (danh hiệu, số tiền, lý do)
+  Row 9: 9 | disciplines | Quyết định kỷ luật (hình thức, mức phạt, hiệu lực)
+  Row 10: 10 | transfer_histories | Lịch sử điều chuyển & bổ nhiệm (phòng ban, chức vụ, lương)
+  Row 11: 11 | recruitment_plans | Kế hoạch tuyển dụng (vị trí, số lượng, yêu cầu)
+  Row 12: 12 | candidates | Hồ sơ ứng viên (thông tin, trạng thái, thử việc)

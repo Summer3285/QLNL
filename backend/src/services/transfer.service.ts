@@ -5,6 +5,7 @@ export class TransferService {
     employeeId: string;
     decisionNumber: string;
     toDepartment: string;
+    toDepartmentId?: string;
     toPosition: string;
     newSalary: number;
     transferDate: string;
@@ -17,6 +18,17 @@ export class TransferService {
     if (!employee) {
       throw new Error('Không tìm thấy thông tin cán bộ.');
     }
+
+    const targetDept = data.toDepartmentId
+      ? await prisma.department.findUnique({ where: { id: data.toDepartmentId } })
+      : await prisma.department.findFirst({
+          where: {
+            OR: [
+              { name: data.toDepartment },
+              { code: data.toDepartment },
+            ],
+          },
+        });
 
     return await prisma.$transaction(async (tx) => {
       // 1. Create transfer history entry
@@ -35,11 +47,12 @@ export class TransferService {
         },
       });
 
-      // 2. Update employee's active department, position, and baseSalary
+      // 2. Update employee's active department, departmentId, position, and baseSalary
       await tx.employeeProfile.update({
         where: { id: data.employeeId },
         data: {
-          department: data.toDepartment,
+          department: targetDept ? targetDept.name : data.toDepartment,
+          departmentId: targetDept ? targetDept.id : undefined,
           position: data.toPosition,
           baseSalary: data.newSalary,
         },

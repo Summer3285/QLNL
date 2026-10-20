@@ -49,3 +49,34 @@ export interface ApiResponse<T = any> {
   data?: T;
   error?: any;
 }
+
+export interface ActiveDisciplineSummary {
+  id: string;
+  decisionNumber: string;
+  form: string;
+  penaltyAmount: number;
+  decisionDate: Date;
+  reason: string;
+}
+
+export interface AutoPerformanceMetrics {
+  cycleId?: string;
+  employeeId: string;
+  totalCheckIns: number;
+  lateOrEarlyCount: number;
+  halfDayCount: number;
+  unpaidLeaveDays: number;
+  violationIndex: number;
+  suggestedAttendanceScore: number;
+  attendanceEvidence: string;
+  activeDisciplinesCount: number;
+  activeDisciplines: ActiveDisciplineSummary[];
+  suggestedDisciplineScore: number;
+  disciplineEvidence: string;
+  suggestedScore: number;
+  suggestedRating: 'EXCELLENT' | 'GOOD' | 'AVERAGE' | 'NEEDS_IMPROVEMENT' | 'UNSATISFACTORY';
+  evidenceSummary: string;
+  hasActiveDiscipline: boolean;
+}
+
+

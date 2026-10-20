@@ -120,14 +120,45 @@ export class RecruitmentService {
     });
   }
 
-  // Gợi ý mã nhân viên kế tiếp
-  static async getNextEmployeeCode(): Promise<string> {
-    const count = await prisma.employeeProfile.count();
-    const candidateNum = count + 1;
-    let code = `NV-${String(candidateNum).padStart(3, '0')}`;
+  static getDeptCodePrefix(department?: string): string {
+    if (!department) return 'ENG';
+    const deptUpper = department.toUpperCase();
+    if (deptUpper.includes('TECH') || deptUpper.includes('ENG') || deptUpper.includes('SOFTWARE') || deptUpper.includes('KỸ THUẬT')) return 'ENG';
+    if (deptUpper.includes('AI') || deptUpper.includes('DATA')) return 'AI';
+    if (deptUpper.includes('PROD') || deptUpper.includes('DESIGN') || deptUpper.includes('SẢN PHẨM') || deptUpper.includes('PRD')) return 'PRD';
+    if (deptUpper.includes('HR') || deptUpper.includes('CULTURE') || deptUpper.includes('PEOPLE') || deptUpper.includes('NHÂN SỰ')) return 'HR';
+    if (deptUpper.includes('FIN') || deptUpper.includes('TÀI CHÍNH') || deptUpper.includes('KẾ TOÁN')) return 'FIN';
+    return 'ENG';
+  }
+
+  // Gợi ý mã nhân viên kế tiếp theo chuẩn NexNova: NN-[MÃ_PHÒNG]-[STT_3_CHỮ_SỐ]
+  static async getNextEmployeeCode(department?: string): Promise<string> {
+    const deptPrefix = this.getDeptCodePrefix(department);
+    const prefix = `NN-${deptPrefix}-`;
+
+    const profiles = await prisma.employeeProfile.findMany({
+      where: {
+        employeeCode: {
+          startsWith: prefix,
+        },
+      },
+      select: { employeeCode: true },
+    });
+
+    let maxNum = 0;
+    for (const p of profiles) {
+      const numPart = p.employeeCode.replace(prefix, '');
+      const parsed = parseInt(numPart, 10);
+      if (!isNaN(parsed) && parsed > maxNum) {
+        maxNum = parsed;
+      }
+    }
+
+    const nextNum = maxNum + 1;
+    let code = `${prefix}${String(nextNum).padStart(3, '0')}`;
     const exists = await prisma.employeeProfile.findUnique({ where: { employeeCode: code } });
     if (!exists) return code;
-    return `NV-${String(candidateNum + 1).padStart(3, '0')}`;
+    return `${prefix}${String(nextNum + 1).padStart(3, '0')}`;
   }
 
   // Onboarding One-Click: Chuyển đổi ứng viên thành nhân viên chính thức
@@ -283,28 +314,88 @@ export class RecruitmentService {
   // Probation Expiry Alerts
   static async getProbationAlerts() {
     const now = new Date();
-    const in15Days = new Date();
-    in15Days.setDate(now.getDate() + 15);
 
+    // 1. Candidates in PROBATION
     const candidates = await prisma.candidate.findMany({
       where: {
-        status: { in: ['PROBATION', 'HIRED'] },
+        status: 'PROBATION',
         probationEndDate: { not: null },
       },
       include: { plan: true },
       orderBy: { probationEndDate: 'asc' },
     });
 
-    return candidates.map((c) => {
+    const candidateAlerts = candidates.map((c) => {
       const end = new Date(c.probationEndDate!);
       const diffDays = Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
       return {
-        ...c,
+        id: c.id,
+        fullName: c.fullName,
+        email: c.email,
+        phone: c.phone,
+        status: c.status,
+        probationMonths: c.probationMonths,
+        probationStartDate: c.probationStartDate,
+        probationEndDate: c.probationEndDate,
+        notes: c.notes,
+        plan: c.plan,
         daysRemaining: diffDays,
         isExpired: diffDays <= 0,
         isExpiringSoon: diffDays > 0 && diffDays <= 15,
       };
     });
+
+    // 2. Active probation contracts of employees
+    const probationContracts = await prisma.contract.findMany({
+      where: {
+        contractType: 'PROBATION',
+        status: 'ACTIVE',
+        endDate: { not: null },
+      },
+      include: {
+        employee: {
+          select: {
+            id: true,
+            fullName: true,
+            phone: true,
+            position: true,
+            department: true,
+            user: { select: { email: true } },
+          },
+        },
+      },
+      orderBy: { endDate: 'asc' },
+    });
+
+    const candidateEmails = new Set(candidateAlerts.map((c) => c.email.toLowerCase()));
+    const employeeAlerts = probationContracts
+      .filter((ct) => ct.employee?.user?.email && !candidateEmails.has(ct.employee.user.email.toLowerCase()))
+      .map((ct) => {
+        const end = new Date(ct.endDate!);
+        const diffDays = Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+        return {
+          id: ct.id,
+          fullName: ct.employee.fullName,
+          email: ct.employee.user?.email || '',
+          phone: ct.employee.phone || '',
+          status: 'PROBATION',
+          probationMonths: 2,
+          probationStartDate: ct.startDate,
+          probationEndDate: ct.endDate,
+          notes: ct.note || `Hợp đồng thử việc ${ct.contractNumber}`,
+          plan: {
+            id: ct.id,
+            title: `HĐ ${ct.contractNumber}`,
+            department: ct.employee.department,
+            position: ct.employee.position || ct.jobTitle || 'Nhân sự',
+          },
+          daysRemaining: diffDays,
+          isExpired: diffDays <= 0,
+          isExpiringSoon: diffDays > 0 && diffDays <= 15,
+        };
+      });
+
+    return [...candidateAlerts, ...employeeAlerts];
   }
 }
 

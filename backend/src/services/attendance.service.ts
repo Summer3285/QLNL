@@ -2,15 +2,25 @@ import { prisma } from '../config/prisma.js';
 import { LeaveType, LeaveStatus } from '../types/index.js';
 
 export class AttendanceService {
-  static async checkIn(employeeId: string, notes?: string) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+  static getTodayRange() {
+    const now = new Date();
+    // Start and end of day in local time
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+    const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+    // UTC normalized date (midnight UTC) to prevent negative day shift when stored in database
+    const todayDate = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0));
+    return { startOfDay, endOfDay, todayDate };
+  }
 
-    const existing = await prisma.attendance.findUnique({
+  static async checkIn(employeeId: string, notes?: string) {
+    const { startOfDay, endOfDay, todayDate } = this.getTodayRange();
+
+    const existing = await prisma.attendance.findFirst({
       where: {
-        employeeId_date: {
-          employeeId,
-          date: today,
+        employeeId,
+        date: {
+          gte: startOfDay,
+          lte: endOfDay,
         },
       },
     });
@@ -37,7 +47,7 @@ export class AttendanceService {
     return await prisma.attendance.create({
       data: {
         employeeId,
-        date: today,
+        date: todayDate,
         checkIn: now,
         status,
         notes,
@@ -46,14 +56,14 @@ export class AttendanceService {
   }
 
   static async checkOut(employeeId: string, notes?: string) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const { startOfDay, endOfDay } = this.getTodayRange();
 
-    const record = await prisma.attendance.findUnique({
+    const record = await prisma.attendance.findFirst({
       where: {
-        employeeId_date: {
-          employeeId,
-          date: today,
+        employeeId,
+        date: {
+          gte: startOfDay,
+          lte: endOfDay,
         },
       },
     });
@@ -125,11 +135,15 @@ export class AttendanceService {
   }
 
   static async getAllTodayAttendance() {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const { startOfDay, endOfDay } = this.getTodayRange();
 
     return await prisma.attendance.findMany({
-      where: { date: today },
+      where: {
+        date: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+      },
       include: {
         employee: {
           select: {
@@ -243,11 +257,16 @@ export class AttendanceService {
     id: string,
     status: LeaveStatus,
     approvedBy: string,
-    reviewComment?: string
+    reviewComment?: string,
+    reviewerEmployeeId?: string
   ) {
     const request = await prisma.leaveRequest.findUnique({ where: { id } });
     if (!request) {
       throw new Error('Không tìm thấy đơn xin nghỉ phép.');
+    }
+
+    if (reviewerEmployeeId && request.employeeId === reviewerEmployeeId) {
+      throw new Error('Bạn không thể tự phê duyệt hoặc từ chối đơn xin nghỉ phép của chính mình.');
     }
 
     const businessDays = this.countBusinessDays(request.startDate, request.endDate);

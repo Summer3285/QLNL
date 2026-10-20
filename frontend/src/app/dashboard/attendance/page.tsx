@@ -114,16 +114,28 @@ export default function AttendancePage() {
     reason: '',
   });
 
+  // Leave Review Modal state
+  const [reviewModal, setReviewModal] = useState<{
+    isOpen: boolean;
+    leaveId: string;
+    status: 'APPROVED' | 'REJECTED';
+    comment: string;
+    employeeName: string;
+    employeeCode: string;
+    submitting: boolean;
+    error: string | null;
+  } | null>(null);
+
   const fetchAttendanceData = async () => {
     setAttendanceLoading(true);
     try {
       const res = await api.get('/api/attendance/my-logs');
       if (res.success && res.data) {
         setMyLogs(res.data.records || []);
-        // Find today log
-        const todayStr = new Date().toISOString().split('T')[0];
+        // Find today log using local date comparison
+        const todayLocale = new Date().toLocaleDateString('vi-VN');
         const found = (res.data.records || []).find((r: any) =>
-          r.date.startsWith(todayStr)
+          new Date(r.date).toLocaleDateString('vi-VN') === todayLocale
         );
         setTodayLog(found || null);
       }
@@ -187,6 +199,9 @@ export default function AttendancePage() {
       });
       if (res.success) {
         setActionMessage({ type: 'success', text: 'Điểm danh Check-In thành công!' });
+        if (res.data) {
+          setTodayLog(res.data);
+        }
         if (typeof window !== 'undefined' && (window as any).electronAPI?.showNotification) {
           (window as any).electronAPI.showNotification(
             'NexNova HRM Desktop',
@@ -211,6 +226,9 @@ export default function AttendancePage() {
       });
       if (res.success) {
         setActionMessage({ type: 'success', text: 'Điểm danh Check-Out thành công!' });
+        if (res.data) {
+          setTodayLog(res.data);
+        }
         if (typeof window !== 'undefined' && (window as any).electronAPI?.showNotification) {
           (window as any).electronAPI.showNotification(
             'NexNova HRM Desktop',
@@ -248,26 +266,47 @@ export default function AttendancePage() {
     }
   };
 
-  const handleApproveLeave = async (id: string, status: 'APPROVED' | 'REJECTED') => {
-    try {
-      const comment = prompt(
-        status === 'APPROVED' ? 'Ghi chú phê duyệt (Tùy chọn):' : 'Lý do từ chối đơn:'
-      );
-      if (status === 'REJECTED' && !comment) {
-        alert('Vui lòng nhập lý do từ chối.');
-        return;
-      }
+  const openReviewModal = (leave: LeaveRequest, status: 'APPROVED' | 'REJECTED') => {
+    const currentEmpId = user?.employeeId || user?.profile?.id;
+    if (currentEmpId && leave.employeeId === currentEmpId) {
+      alert('Bạn không thể tự phê duyệt hoặc từ chối đơn xin nghỉ phép của chính mình.');
+      return;
+    }
 
-      const res = await api.put(`/api/attendance/leaves/${id}/status`, {
-        status,
-        reviewComment: comment || 'Đã duyệt qua hệ thống HRM.',
+    setReviewModal({
+      isOpen: true,
+      leaveId: leave.id,
+      status,
+      comment: status === 'APPROVED' ? 'Đã duyệt qua hệ thống HRM.' : '',
+      employeeName: leave.employee?.fullName || 'Nhân viên',
+      employeeCode: leave.employee?.employeeCode || '',
+      submitting: false,
+      error: null,
+    });
+  };
+
+  const submitReviewModal = async () => {
+    if (!reviewModal) return;
+    if (reviewModal.status === 'REJECTED' && !reviewModal.comment.trim()) {
+      setReviewModal({ ...reviewModal, error: 'Vui lòng nhập lý do từ chối đơn.' });
+      return;
+    }
+
+    setReviewModal({ ...reviewModal, submitting: true, error: null });
+    try {
+      const res = await api.put(`/api/attendance/leaves/${reviewModal.leaveId}/status`, {
+        status: reviewModal.status,
+        reviewComment: reviewModal.comment.trim(),
       });
 
       if (res.success) {
+        setReviewModal(null);
         fetchLeaves();
+      } else {
+        setReviewModal({ ...reviewModal, submitting: false, error: res.message || 'Lỗi khi xử lý đơn.' });
       }
     } catch (err: any) {
-      alert(err.message || 'Lỗi khi xử lý đơn nghỉ phép.');
+      setReviewModal({ ...reviewModal, submitting: false, error: err.message || 'Lỗi khi xử lý đơn nghỉ phép.' });
     }
   };
 
@@ -669,6 +708,8 @@ export default function AttendancePage() {
                       const busDays = calculateBusinessDays(l.startDate, l.endDate);
                       const rem = l.employee?.annualLeaveBalance ?? 12;
                       const isOver = l.leaveType === 'ANNUAL' && busDays > rem;
+                      const currentEmpId = user?.employeeId || user?.profile?.id;
+                      const isOwnLeave = Boolean(currentEmpId && (l.employeeId === currentEmpId || l.employee?.id === currentEmpId));
                       return (
                         <tr key={l.id} className="hover:bg-slate-50/70 transition-colors">
                           <td className="px-5 py-3.5 whitespace-nowrap">
@@ -710,18 +751,27 @@ export default function AttendancePage() {
                           </td>
                           <td className="px-5 py-3.5 text-slate-700 max-w-xs">{l.reason}</td>
                           <td className="px-5 py-4 text-right space-x-2 whitespace-nowrap">
-                            <button
-                              onClick={() => handleApproveLeave(l.id, 'APPROVED')}
-                              className="h-8 px-3 rounded-sm bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition-colors shadow-none"
-                            >
-                              Duyệt Đơn
-                            </button>
-                            <button
-                              onClick={() => handleApproveLeave(l.id, 'REJECTED')}
-                              className="h-8 px-3 rounded-sm bg-white hover:bg-red-50 text-red-600 border border-red-200 text-xs font-semibold transition-colors"
-                            >
-                              Từ Chối
-                            </button>
+                            {isOwnLeave ? (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                                <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                                Đơn của bạn (Không thể tự duyệt)
+                              </span>
+                            ) : (
+                              <>
+                                <button
+                                  onClick={() => openReviewModal(l, 'APPROVED')}
+                                  className="h-8 px-3 rounded-sm bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition-colors shadow-none"
+                                >
+                                  Duyệt Đơn
+                                </button>
+                                <button
+                                  onClick={() => openReviewModal(l, 'REJECTED')}
+                                  className="h-8 px-3 rounded-sm bg-white hover:bg-red-50 text-red-600 border border-red-200 text-xs font-semibold transition-colors"
+                                >
+                                  Từ Chối
+                                </button>
+                              </>
+                            )}
                           </td>
                         </tr>
                       );
@@ -795,37 +845,41 @@ export default function AttendancePage() {
               <div className="p-3.5 rounded-sm bg-slate-50 border border-slate-200 space-y-2">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-600 font-medium">Số ngày công xin nghỉ:</span>
-                  <span className="font-mono font-bold text-slate-900 text-sm">
+                  <span className={`font-mono font-bold text-sm ${reqDays === 0 ? 'text-rose-600' : 'text-slate-900'}`}>
                     {reqDays} ngày làm việc
                   </span>
                 </div>
 
-                {leaveForm.leaveType === 'ANNUAL' && (
-                  <div className="pt-2 border-t border-slate-200">
-                    {isInsufficient ? (
-                      <div className="p-2.5 rounded-sm bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2">
-                        <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-                        <div>
-                          <div className="font-bold">Quỹ phép năm không đủ!</div>
-                          <div className="text-[11px] mt-0.5">
-                            Đơn xin <strong>{reqDays} ngày</strong> nhưng bạn chỉ còn <strong>{leaveBalance.remainingDays} ngày</strong> phép. Hãy chuyển sang "Nghỉ không hưởng lương (UNPAID)" hoặc điều chỉnh lại ngày.
+                {reqDays === 0 ? (
+                  <div className="p-2.5 rounded-sm bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+                    <span className="font-medium">
+                      Khoảng thời gian đã chọn rơi vào ngày nghỉ cuối tuần (Thứ 7 - Chủ Nhật). Không có ngày làm việc nào cần xin nghỉ.
+                    </span>
+                  </div>
+                ) : (
+                  leaveForm.leaveType === 'ANNUAL' && (
+                    <div className="pt-2 border-t border-slate-200">
+                      {isInsufficient ? (
+                        <div className="p-2.5 rounded-sm bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2">
+                          <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                          <div>
+                            <div className="font-bold">Quỹ phép năm không đủ!</div>
+                            <div className="text-[11px] mt-0.5">
+                              Đơn xin <strong>{reqDays} ngày</strong> nhưng bạn chỉ còn <strong>{leaveBalance.remainingDays} ngày</strong> phép. Hãy chuyển sang "Nghỉ không hưởng lương (UNPAID)" hoặc điều chỉnh lại ngày.
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ) : reqDays > 0 ? (
-                      <div className="p-2 rounded-sm bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                        <div>
-                          Quỹ phép khả dụng. Sau khi duyệt dự kiến bạn còn lại <strong>{leaveBalance.remainingDays - reqDays} ngày</strong>.
+                      ) : (
+                        <div className="p-2 rounded-sm bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <div>
+                            Quỹ phép khả dụng. Sau khi duyệt dự kiến bạn còn lại <strong>{leaveBalance.remainingDays - reqDays} ngày</strong>.
+                          </div>
                         </div>
-                      </div>
-                    ) : (
-                      <div className="text-xs text-amber-700 flex items-center gap-1.5">
-                        <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                        <span>Khoảng thời gian đã chọn rơi vào cuối tuần (T7, CN). Vui lòng chọn ngày làm việc.</span>
-                      </div>
-                    )}
-                  </div>
+                      )}
+                    </div>
+                  )
                 )}
               </div>
             );
@@ -858,10 +912,11 @@ export default function AttendancePage() {
               type="submit"
               disabled={
                 leaveSubmitting ||
-                (Boolean(leaveForm.startDate && leaveForm.endDate) &&
-                  (calculateBusinessDays(leaveForm.startDate, leaveForm.endDate) === 0 ||
-                    (leaveForm.leaveType === 'ANNUAL' &&
-                      calculateBusinessDays(leaveForm.startDate, leaveForm.endDate) > leaveBalance.remainingDays)))
+                !leaveForm.startDate ||
+                !leaveForm.endDate ||
+                calculateBusinessDays(leaveForm.startDate, leaveForm.endDate) === 0 ||
+                (leaveForm.leaveType === 'ANNUAL' &&
+                  calculateBusinessDays(leaveForm.startDate, leaveForm.endDate) > leaveBalance.remainingDays)
               }
               className="h-9 px-5 rounded-sm bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-none"
             >
@@ -869,6 +924,68 @@ export default function AttendancePage() {
             </button>
           </div>
         </form>
+      </Modal>
+
+      {/* Custom Modal for Leave Approval / Rejection */}
+      <Modal
+        isOpen={Boolean(reviewModal?.isOpen)}
+        onClose={() => setReviewModal(null)}
+        title={reviewModal?.status === 'APPROVED' ? 'Phê Duyệt Đơn Nghỉ Phép' : 'Từ Chối Đơn Nghỉ Phép'}
+      >
+        {reviewModal && (
+          <div className="space-y-4 text-sm">
+            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-sm space-y-1">
+              <div className="text-slate-600 text-xs">
+                Cán bộ nộp đơn: <strong className="text-slate-900">{reviewModal.employeeName}</strong> ({reviewModal.employeeCode})
+              </div>
+              <div className="text-xs text-slate-500">
+                Thao tác: <strong className={reviewModal.status === 'APPROVED' ? 'text-emerald-700 font-bold' : 'text-rose-700 font-bold'}>
+                  {reviewModal.status === 'APPROVED' ? 'Chấp thuận phê duyệt đơn' : 'Từ chối đơn xin nghỉ'}
+                </strong>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wide mb-1.5">
+                {reviewModal.status === 'APPROVED' ? 'Ghi chú phê duyệt (Tùy chọn)' : 'Lý do từ chối *'}
+              </label>
+              <textarea
+                rows={3}
+                value={reviewModal.comment}
+                onChange={(e) => setReviewModal({ ...reviewModal, comment: e.target.value, error: null })}
+                placeholder={reviewModal.status === 'APPROVED' ? 'Nhập ghi chú phê duyệt...' : 'Vui lòng nêu rõ lý do từ chối đơn...'}
+                className="w-full bg-white border border-slate-300 rounded-sm p-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
+
+            {reviewModal.error && (
+              <div className="p-2.5 rounded-sm bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+                <span>{reviewModal.error}</span>
+              </div>
+            )}
+
+            <div className="pt-3 flex items-center justify-end gap-3 border-t border-slate-200">
+              <button
+                type="button"
+                onClick={() => setReviewModal(null)}
+                className="h-9 px-4 rounded-sm bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-sm transition-colors"
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                disabled={reviewModal.submitting || (reviewModal.status === 'REJECTED' && !reviewModal.comment.trim())}
+                onClick={submitReviewModal}
+                className={`h-9 px-5 rounded-sm text-white font-semibold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-none ${
+                  reviewModal.status === 'APPROVED' ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-rose-600 hover:bg-rose-700'
+                }`}
+              >
+                {reviewModal.submitting ? 'Đang xử lý...' : reviewModal.status === 'APPROVED' ? 'Xác nhận Phê Duyệt' : 'Xác nhận Từ Chối'}
+              </button>
+            </div>
+          </div>
+        )}
       </Modal>
     </div>
   );

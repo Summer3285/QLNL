@@ -187,20 +187,59 @@ export default function EmployeesPage() {
     }
   };
 
+const getDeptCodePrefix = (dept?: { code?: string; name?: string }): string => {
+  if (!dept) return 'ENG';
+  const code = (dept.code || '').toUpperCase();
+  const name = (dept.name || '').toUpperCase();
+  if (code.includes('TECH') || code.includes('ENG') || name.includes('SOFTWARE') || name.includes('KỸ THUẬT')) return 'ENG';
+  if (code.includes('AI') || name.includes('AI') || name.includes('DATA')) return 'AI';
+  if (code.includes('PROD') || name.includes('PRODUCT') || name.includes('DESIGN') || name.includes('SẢN PHẨM')) return 'PRD';
+  if (code.includes('HR') || name.includes('PEOPLE') || name.includes('NHÂN SỰ')) return 'HR';
+  if (code.includes('FIN') || name.includes('FINANCE') || name.includes('TÀI CHÍNH') || name.includes('KẾ TOÁN')) return 'FIN';
+  return 'ENG';
+};
+
+const generateNextEmployeeCode = (
+  deptId: string,
+  currentEmployees: EmployeeProfile[],
+  depts: Department[]
+): string => {
+  const targetDept = depts.find((d) => d.id === deptId) || depts[0];
+  const prefix = `NN-${getDeptCodePrefix(targetDept)}-`;
+
+  let maxNum = 0;
+  for (const emp of currentEmployees) {
+    if (emp.employeeCode && emp.employeeCode.startsWith(prefix)) {
+      const num = parseInt(emp.employeeCode.replace(prefix, ''), 10);
+      if (!isNaN(num) && num > maxNum) {
+        maxNum = num;
+      }
+    }
+  }
+  const nextNum = maxNum + 1;
+  return `${prefix}${String(nextNum).padStart(3, '0')}`;
+};
+
   const handleOpenAddModal = () => {
     setEditingEmployee(null);
     setEditModalTab('JOB');
     setFormError(null);
     setFormSuccess(null);
+
+    const firstDept = departments[0];
+    const initialDeptId = firstDept?.id || '';
+    const initialDeptName = firstDept?.name || 'Software Engineering';
+    const nextCode = generateNextEmployeeCode(initialDeptId, employees, departments);
+
     setFormData({
       email: '',
       passwordPlain: 'Emp@123',
       role: 'EMPLOYEE',
-      employeeCode: `NN-EMP-${String(employees.length + 1).padStart(3, '0')}`,
+      employeeCode: nextCode,
       fullName: '',
       phone: '',
-      departmentId: departments[0]?.id || '',
-      department: departments[0]?.name || 'Software Engineering',
+      departmentId: initialDeptId,
+      department: initialDeptName,
       cadreType: 'STAFF',
       isCadre: false,
       appointmentDate: '',
@@ -1193,7 +1232,19 @@ export default function EmployeesPage() {
                   <label className="block text-slate-700 font-medium mb-1">Phòng Ban Trực Thuộc *</label>
                   <select
                     value={formData.departmentId}
-                    onChange={(e) => setFormData({ ...formData, departmentId: e.target.value })}
+                    onChange={(e) => {
+                      const newDeptId = e.target.value;
+                      const matchedDept = departments.find((d) => d.id === newDeptId);
+                      const updated: any = {
+                        ...formData,
+                        departmentId: newDeptId,
+                        department: matchedDept?.name || formData.department,
+                      };
+                      if (!editingEmployee) {
+                        updated.employeeCode = generateNextEmployeeCode(newDeptId, employees, departments);
+                      }
+                      setFormData(updated);
+                    }}
                     className="w-full h-9 bg-white border border-slate-300 rounded-sm px-3 text-slate-900 focus:outline-none focus:border-blue-500"
                   >
                     {departments.map((d) => (

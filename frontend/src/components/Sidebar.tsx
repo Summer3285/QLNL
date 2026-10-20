@@ -47,7 +47,7 @@ export default function Sidebar() {
         { title: 'Bảng lương', href: '/dashboard/payroll', icon: Banknote },
         { title: 'Đánh giá', href: '/dashboard/performance', icon: Award },
         { title: 'Khen thưởng', href: '/dashboard/rewards', icon: Trophy },
-        { title: 'Thuyên chuyển', href: '/dashboard/transfers', icon: ArrowRightLeft },
+        { title: 'Điều động', href: '/dashboard/transfers', icon: ArrowRightLeft },
         { title: 'Báo cáo', href: '/dashboard/reports', icon: BarChart3 },
         { title: 'Hồ sơ', href: '/dashboard/profile', icon: UserCircle },
       ];
@@ -55,7 +55,7 @@ export default function Sidebar() {
   return (
     <aside
       className={`${
-        isExpanded ? 'w-[210px]' : 'w-[72px]'
+        isExpanded ? 'w-[210px]' : 'w-[80px]'
       } bg-[#f0f3f8] text-slate-700 min-h-screen flex flex-col border-r border-slate-200 shrink-0 select-none transition-all duration-200 z-20`}
     >
       {/* Top Header with 1Office-style Hamburger Button */}
@@ -113,7 +113,7 @@ export default function Sidebar() {
                     <Icon className="w-5 h-5 text-slate-500 group-hover:text-slate-800 transition-colors" />
                   </div>
                 )}
-                <span className="text-[10.5px] mt-1 text-center leading-tight truncate w-full px-0.5 tracking-tight font-medium">
+                <span className="text-[11px] mt-1 text-center leading-tight w-full px-1 tracking-tight font-medium">
                   {item.title}
                 </span>
               </Link>

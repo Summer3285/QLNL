@@ -85,13 +85,22 @@ router.post(
   PerformanceController.createCycle
 );
 
-router.get('/cycles/:cycleId/reviews', PerformanceController.getReviewsByCycle);
+router.get(
+  '/cycles/:cycleId/reviews',
+  requireRoles(['ADMIN', 'HR_MANAGER']),
+  PerformanceController.getReviewsByCycle
+);
 router.get('/cycles/:cycleId/my-review', PerformanceController.getMyReview);
 router.get(
   '/cycles/:cycleId/summary',
   requireRoles(['ADMIN', 'HR_MANAGER']),
   PerformanceController.getCycleSummary
 );
+router.get(
+  '/cycles/:cycleId/metrics/:employeeId',
+  PerformanceController.getAutoMetrics
+);
+
 
 // --- Reviews ---
 router.post(

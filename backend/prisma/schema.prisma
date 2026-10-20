@@ -195,6 +195,8 @@ model PerformanceReview {
   employee           EmployeeProfile   @relation("SelfReviews", fields: [employeeId], references: [id], onDelete: Cascade)
   reviewerId         String?
   reviewer           EmployeeProfile?  @relation("ManagerReviews", fields: [reviewerId], references: [id])
+  templateId         String?
+  template           KpiTemplate?      @relation(fields: [templateId], references: [id])
   selfScore          Float?
   selfComment        String?
   mgrScore           Float?
@@ -297,14 +299,17 @@ model Candidate {
 }
 
 model KpiTemplate {
-  id          String             @id @default(uuid())
-  name        String
-  description String?
-  isDefault   Boolean            @default(false)
-  categories  KpiCategory[]
-  cycles      PerformanceCycle[]
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
+  id               String              @id @default(uuid())
+  name             String
+  description      String?
+  isDefault        Boolean             @default(false)
+  targetDepartment String?             @default("ALL") // Mã phòng ban: "ALL", "PB-TECH", "PB-AI", "PB-PROD", "PB-HR", "PB-FIN"
+  targetRole       String?             @default("ALL") // Cấp bậc: "ALL", "CADRE" (Lãnh đạo/Quản lý), "STAFF" (Nhân viên chuyên môn)
+  categories       KpiCategory[]
+  cycles           PerformanceCycle[]
+  reviews          PerformanceReview[]
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
 
   @@map("kpi_templates")
 }

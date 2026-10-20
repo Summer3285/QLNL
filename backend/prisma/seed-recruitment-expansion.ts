@@ -82,9 +82,14 @@ async function main() {
   ];
 
   for (const plan of plans) {
-    await prisma.recruitmentPlan.create({ data: plan });
+    const existing = await prisma.recruitmentPlan.findFirst({
+      where: { title: plan.title },
+    });
+    if (!existing) {
+      await prisma.recruitmentPlan.create({ data: plan });
+    }
   }
-  console.log('✅ Đã tạo 5 kế hoạch tuyển dụng.');
+  console.log('✅ Đã kiểm tra và tạo kế hoạch tuyển dụng.');
 
   // 2. CREATE 14 EMPLOYEES
   console.log('👥 Đang bổ sung 14 hồ sơ nhân sự mới...');
@@ -347,23 +352,30 @@ async function main() {
 
   for (const emp of newEmployees) {
     const { email, ...profileData } = emp;
-    await prisma.user.create({
-      data: {
-        email,
-        passwordHash: defaultPass,
-        role: 'EMPLOYEE',
-        profile: {
-          create: {
-            ...profileData,
-            joinDate: probationDate,
-            lastSalaryRaise: probationDate
-          }
-        }
-      }
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    const existingProfile = await prisma.employeeProfile.findUnique({
+      where: { employeeCode: profileData.employeeCode },
     });
+
+    if (!existingUser && !existingProfile) {
+      await prisma.user.create({
+        data: {
+          email,
+          passwordHash: defaultPass,
+          role: 'EMPLOYEE',
+          profile: {
+            create: {
+              ...profileData,
+              joinDate: probationDate,
+              lastSalaryRaise: probationDate,
+            },
+          },
+        },
+      });
+    }
   }
 
-  console.log('✅ Đã bổ sung thành công 14 nhân sự vào các phòng ban!');
+  console.log('✅ Đã kiểm tra và bổ sung 14 nhân sự vào các phòng ban!');
 }
 
 main()

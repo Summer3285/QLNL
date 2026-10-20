@@ -61,7 +61,8 @@ export class RecruitmentController {
 
   static async getNextCode(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const nextCode = await RecruitmentService.getNextEmployeeCode();
+      const department = (req.query.department as string) || (req.query.departmentCode as string);
+      const nextCode = await RecruitmentService.getNextEmployeeCode(department);
       res.json({ success: true, data: { nextCode } });
     } catch (error) {
       next(error);

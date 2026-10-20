@@ -196,4 +196,26 @@ export class PerformanceController {
       });
     }
   }
+
+  static async getAutoMetrics(
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const { cycleId, employeeId } = req.params;
+      const metrics = await PerformanceService.calculateAttendanceAndDisciplineMetrics(
+        employeeId,
+        cycleId
+      );
+      if (!metrics) {
+        res.status(404).json({ success: false, message: 'Không tìm thấy kỳ đánh giá hoặc thông tin nhân sự.' });
+        return;
+      }
+      res.json({ success: true, data: metrics });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
+

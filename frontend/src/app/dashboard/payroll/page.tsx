@@ -7,6 +7,7 @@ import { PayrollRecord, Department } from '../../../types';
 import { formatVND } from '../../../lib/utils';
 import StatCard from '../../../components/StatCard';
 import PayslipModal from '../../../components/PayslipModal';
+import Modal from '../../../components/Modal';
 import {
   Banknote,
   Calendar,
@@ -37,6 +38,7 @@ export default function PayrollPage() {
   const [selectedPayrollId, setSelectedPayrollId] = useState<string | null>(null);
   const [selectedPayroll, setSelectedPayroll] = useState<PayrollRecord | null>(null);
   const [isPayslipOpen, setIsPayslipOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const fetchPayrolls = async () => {
     setLoading(true);
@@ -61,11 +63,8 @@ export default function PayrollPage() {
     fetchPayrolls();
   }, [month, year]);
 
-  const handleRunPayroll = async () => {
-    if (!confirm(`Bạn có chắc muốn kích hoạt tự động tính lương toàn công ty cho Tháng ${month}/${year}?`)) {
-      return;
-    }
-
+  const handleExecuteRunPayroll = async () => {
+    setIsConfirmModalOpen(false);
     setRunning(true);
     setNotification(null);
     try {
@@ -175,7 +174,7 @@ export default function PayrollPage() {
 
         {isHR && (
           <button
-            onClick={handleRunPayroll}
+            onClick={() => setIsConfirmModalOpen(true)}
             disabled={running}
             className="inline-flex items-center gap-2 px-3.5 py-2 rounded-sm bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs transition-colors shadow-xs disabled:opacity-50"
           >
@@ -407,6 +406,51 @@ export default function PayrollPage() {
           </table>
         </div>
       </div>
+
+      {/* Confirmation Modal for Running Payroll */}
+      <Modal
+        isOpen={isConfirmModalOpen}
+        onClose={() => setIsConfirmModalOpen(false)}
+        title="Xác Nhận Tính Lương Tự Động"
+        maxWidth="max-w-md"
+      >
+        <div className="space-y-4">
+          <div className="flex items-start gap-3 p-3.5 bg-blue-50 border border-blue-200 rounded-sm text-xs text-blue-900">
+            <Calculator className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-semibold text-sm text-blue-950">
+                Tính lương toàn doanh nghiệp Tháng {month}/{year}
+              </p>
+              <p className="mt-1 text-slate-600">
+                Hệ thống sẽ tự động tổng hợp dữ liệu chấm công, ngày nghỉ phép, thưởng, và các khoản phạt kỷ luật trong kỳ để trích đóng BHXH, thuế TNCN lũy tiến 7 bậc và tính thực lĩnh cho toàn bộ nhân sự.
+              </p>
+            </div>
+          </div>
+
+          <p className="text-xs text-slate-500">
+            Các bản ghi lương của Tháng {month}/{year} đã có sẵn sẽ được cập nhật lại theo số liệu mới nhất. Bạn có chắc chắn muốn tiếp tục?
+          </p>
+
+          <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200">
+            <button
+              type="button"
+              onClick={() => setIsConfirmModalOpen(false)}
+              className="px-3 py-1.5 rounded-sm border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-medium"
+            >
+              Hủy bỏ
+            </button>
+            <button
+              type="button"
+              onClick={handleExecuteRunPayroll}
+              disabled={running}
+              className="px-4 py-1.5 rounded-sm bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-none flex items-center gap-1.5"
+            >
+              <Calculator className="w-4 h-4" />
+              <span>{running ? 'Đang tính...' : 'Xác nhận tính lương'}</span>
+            </button>
+          </div>
+        </div>
+      </Modal>
 
       {/* Payslip Modal */}
       <PayslipModal

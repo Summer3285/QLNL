@@ -4,6 +4,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '../lib/auth-context';
+import { api } from '../lib/api';
+import { formatTime } from '../lib/utils';
 import {
   Search,
   Bell,
@@ -33,7 +35,42 @@ export default function Navbar() {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [checkedIn, setCheckedIn] = useState(true);
+  const [attendanceBadge, setAttendanceBadge] = useState<{ checkedIn: boolean; time?: string }>({
+    checkedIn: false,
+  });
+
+  // Fetch today's check-in status from API
+  useEffect(() => {
+    let isMounted = true;
+    async function loadAttendanceBadge() {
+      if (!user) return;
+      try {
+        const res = await api.get('/api/attendance/my-logs');
+        if (res.success && res.data?.records && isMounted) {
+          const todayLocale = new Date().toLocaleDateString('vi-VN');
+          const found = res.data.records.find((r: any) =>
+            new Date(r.date).toLocaleDateString('vi-VN') === todayLocale
+          );
+          if (found && found.checkIn) {
+            setAttendanceBadge({
+              checkedIn: true,
+              time: formatTime(found.checkIn),
+            });
+            return;
+          }
+        }
+        if (isMounted) {
+          setAttendanceBadge({ checkedIn: false });
+        }
+      } catch (err) {
+        // quiet error on badge load
+      }
+    }
+    loadAttendanceBadge();
+    return () => {
+      isMounted = false;
+    };
+  }, [user, pathname]);
 
   const profileRef = useRef<HTMLDivElement>(null);
   const notifRef = useRef<HTMLDivElement>(null);
@@ -181,18 +218,25 @@ export default function Navbar() {
       {/* Right Area: Check-in Status, Notifications & User Dropdown */}
       <div className="flex items-center space-x-2 sm:space-x-3">
         {/* Quick Check-in Badge (HRM Standard) */}
-        <button
-          onClick={() => setCheckedIn(!checkedIn)}
-          title="Nhấn để đổi trạng thái điểm danh"
-          className={`hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-sm text-xs font-medium transition-colors border ${
-            checkedIn
-              ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100/70'
-              : 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100/70'
-          }`}
-        >
-          <Clock className="w-3.5 h-3.5" />
-          <span>{checkedIn ? 'Đã điểm danh: 08:15' : 'Chưa điểm danh'}</span>
-        </button>
+        {attendanceBadge.checkedIn ? (
+          <Link
+            href="/dashboard/attendance"
+            title="Đã điểm danh hôm nay - Nhấn để xem lịch sử ca"
+            className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-sm text-xs font-semibold transition-colors border bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100/70"
+          >
+            <Clock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+            <span>Đã điểm danh: {attendanceBadge.time}</span>
+          </Link>
+        ) : (
+          <Link
+            href="/dashboard/attendance"
+            title="Chưa ghi nhận điểm danh hôm nay - Nhấn để Check-in"
+            className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-sm text-xs font-semibold transition-colors border bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100/70"
+          >
+            <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+            <span>Chưa điểm danh hôm nay</span>
+          </Link>
+        )}
 
         <div className="h-4 w-px bg-slate-200 hidden sm:block"></div>
 

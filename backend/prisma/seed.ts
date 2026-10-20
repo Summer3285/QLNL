@@ -11,12 +11,23 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Bắt đầu gieo mầm dữ liệu (Seeding) cho NexNova Technologies...');
 
-  // Clean old data in safe order
+  // Clean old data in safe foreign-key order
+  await prisma.reviewScore.deleteMany();
   await prisma.performanceReview.deleteMany();
   await prisma.performanceCycle.deleteMany();
+  await prisma.kpiCriteria.deleteMany();
+  await prisma.kpiCategory.deleteMany();
+  await prisma.kpiTemplate.deleteMany();
+  await prisma.candidate.deleteMany();
+  await prisma.recruitmentPlan.deleteMany();
+  await prisma.contract.deleteMany();
+  await prisma.reward.deleteMany();
+  await prisma.discipline.deleteMany();
+  await prisma.transferHistory.deleteMany();
   await prisma.payroll.deleteMany();
   await prisma.leaveRequest.deleteMany();
   await prisma.attendance.deleteMany();
+  await prisma.department.deleteMany();
   await prisma.employeeProfile.deleteMany();
   await prisma.user.deleteMany();
 
